@@ -261,3 +261,25 @@ nav h1 a {
 #restaurant-hours table {
   width: 100%;
 }
+
+/* ====================== Responsive home page ====================== */
+@media screen and (min-width: 400px) {
+  #restaurants-list li {
+    width: 250px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+#restaurants-list {
+  margin: 1.5em;
+  display: flex;
+  flex-wrap: wrap;
+  }
+}
+@media screen and (min-width: 1024px) {
+  body {
+    background-color: #f3f3f3;
+    width: 1024px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
