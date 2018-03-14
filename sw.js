@@ -1,4 +1,4 @@
-var staticCacheName = 'mws-restourant-static-v20';
+var staticCacheName = 'mws-restourant-static-v21';
 
 self.addEventListener('install', function(event) {
   event.waitUntil(
@@ -21,6 +21,7 @@ self.addEventListener('install', function(event) {
         '/js/main.js',
         '/js/restaurant_info.js',
         '/js/dbhelper.js',
+        '/sw.js',
         '/data/restaurants.json',
         'restaurant.html?id=1',
         'restaurant.html?id=2',
