@@ -137,11 +137,10 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
  */
 createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
-
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   image.alt = ''
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.src = renameFilename(DBHelper.imageUrlForRestaurant(restaurant),'-300');
   li.append(image);
 
   const name = document.createElement('h1');
@@ -237,3 +236,9 @@ if ('serviceWorker' in navigator) {
     document.getElementById('map-container').style.display = "none";
   }
 }
+
+function renameFilename(filename, string){
+  var dotIndex = filename.lastIndexOf(".");
+  if (dotIndex == -1) return filename + string;
+  else return filename.substring(0, dotIndex) + string + filename.substring(dotIndex);
+} 
