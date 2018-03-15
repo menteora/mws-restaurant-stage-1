@@ -241,6 +241,16 @@ nav h1 a {
   letter-spacing: -1px;
   padding-bottom: 1pt;
 }
+#review-name {
+  font-weight: bold;
+}
+#review-date {
+  font-style: italic;
+}
+#review-rating {
+  font-weight: bold;
+  text-align: right;
+}
 #reviews-list {
   margin: 0;
   padding: 0;

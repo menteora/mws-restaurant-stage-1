@@ -16,6 +16,7 @@ window.initMap = () => {
       });
       fillBreadcrumb();
       DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
+      AppHelper.offineRemoveMap();
     }
   });
 }
@@ -55,10 +56,19 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;
 
+  const picture = document.getElementById('restaurant-picture');
+  
+  const source = document.createElement('source');
+  source.media = '(min-width: 450px)';
+  source.srcset = AppHelper.setSuffixToFile(DBHelper.imageUrlForRestaurant(restaurant),'-300');
+
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img';
   image.alt = '';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
+
+  // Insert source before image
+  picture.insertBefore(source, image);
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
@@ -119,15 +129,18 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 createReviewHTML = (review) => {
   const li = document.createElement('li');
   const name = document.createElement('p');
+  name.setAttribute("id", "review-name");
   name.innerHTML = review.name;
   li.appendChild(name);
 
   const date = document.createElement('p');
   date.innerHTML = review.date;
+  date.setAttribute("id", "review-date");
   li.appendChild(date);
 
   const rating = document.createElement('p');
   rating.innerHTML = `Rating: ${review.rating}`;
+  rating.setAttribute("id", "review-rating");
   li.appendChild(rating);
 
   const comments = document.createElement('p');
