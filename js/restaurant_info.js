@@ -16,6 +16,7 @@ window.initMap = () => {
       });
       fillBreadcrumb();
       DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
+      // Init service worker
       AppHelper.startServiceWorker();
     }
   });
@@ -58,9 +59,10 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 
   const picture = document.getElementById('restaurant-picture');
   
+  // Use small image from 0 to 400px
   const source = document.createElement('source');
-  source.media = '(min-width: 400px)';
-  source.srcset = AppHelper.setSuffixToFile(DBHelper.imageUrlForRestaurant(restaurant),'-400');
+  source.media = '(max-width: 400px)';
+  source.srcset = AppHelper.setSuffixToFile(DBHelper.imageUrlForRestaurant(restaurant),'-300');
 
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img';
@@ -129,17 +131,20 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 createReviewHTML = (review) => {
   const li = document.createElement('li');
   const name = document.createElement('p');
+  // Add attribute for css
   name.setAttribute("id", "review-name");
   name.innerHTML = review.name;
   li.appendChild(name);
 
   const date = document.createElement('p');
   date.innerHTML = review.date;
+  // Add attribute for css
   date.setAttribute("id", "review-date");
   li.appendChild(date);
 
   const rating = document.createElement('p');
   rating.innerHTML = `Rating: ${review.rating}`;
+  // Add attribute for css
   rating.setAttribute("id", "review-rating");
   li.appendChild(rating);
 
