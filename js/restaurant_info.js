@@ -16,7 +16,7 @@ window.initMap = () => {
       });
       fillBreadcrumb();
       DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
-      AppHelper.offineRemoveMap();
+      AppHelper.startServiceWorker();
     }
   });
 }
