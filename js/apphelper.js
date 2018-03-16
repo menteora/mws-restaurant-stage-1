@@ -1,20 +1,30 @@
 class AppHelper {
 
+  /**
+  * @description Change image suffix name based on string 
+  * @param {string} filename - Name of file to change
+  * @param {string} string - Suffix to append
+  */
   static setSuffixToFile(filename, string) {
     var dotIndex = filename.lastIndexOf(".");
     if (dotIndex == -1) return filename + string;
     else return filename.substring(0, dotIndex) + string + filename.substring(dotIndex);
   }
 
+  /**
+  * @description Remove map-container from page, the tag is fixed
+  */
   static offineRemoveMap() {
     if ('serviceWorker' in navigator) {
       if (!navigator.onLine) {
-        console.log('offline');
         document.getElementById('map-container').style.display = "none";
       }
     }
   }
 
+  /**
+  * @description Service worker init and workflow
+  */
   static startServiceWorker() {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js').then((reg) => {
@@ -62,7 +72,6 @@ class AppHelper {
         window.location.reload();
         refreshing = true;
       });
-
       this.offineRemoveMap();
     }
   }

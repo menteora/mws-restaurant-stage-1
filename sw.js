@@ -63,17 +63,14 @@ self.addEventListener('activate', function(event) {
     })
   );
 });
-
 self.addEventListener('fetch', function(event) {
   var requestUrl = new URL(event.request.url);
-
   event.respondWith(
     caches.match(event.request).then(function(response) {
       return response || fetch(event.request);
     })
   );
 });
-
 self.addEventListener('message', function(event) {
   if (event.data.action === 'skipWaiting') {
     self.skipWaiting();
