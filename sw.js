@@ -1,4 +1,4 @@
-var staticCacheName = 'mws-restourant-static-v30';
+var staticCacheName = 'mws-restourant-static-v31';
 
 self.addEventListener('install', function(event) {
   event.waitUntil(

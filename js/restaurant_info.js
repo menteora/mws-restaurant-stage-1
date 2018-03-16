@@ -59,8 +59,8 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const picture = document.getElementById('restaurant-picture');
   
   const source = document.createElement('source');
-  source.media = '(min-width: 450px)';
-  source.srcset = AppHelper.setSuffixToFile(DBHelper.imageUrlForRestaurant(restaurant),'-300');
+  source.media = '(min-width: 400px)';
+  source.srcset = AppHelper.setSuffixToFile(DBHelper.imageUrlForRestaurant(restaurant),'-400');
 
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img';
