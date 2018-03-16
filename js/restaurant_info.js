@@ -64,6 +64,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   source.media = '(max-width: 400px)';
   source.srcset = AppHelper.setSuffixToFile(DBHelper.imageUrlForRestaurant(restaurant),'-300');
 
+  // Standard image is resized to maximum 600px
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img';
   image.alt = '';
@@ -132,20 +133,20 @@ createReviewHTML = (review) => {
   const li = document.createElement('li');
   const name = document.createElement('p');
   // Add attribute for css
-  name.setAttribute("id", "review-name");
+  name.setAttribute("class", "review-name");
   name.innerHTML = review.name;
   li.appendChild(name);
 
   const date = document.createElement('p');
   date.innerHTML = review.date;
   // Add attribute for css
-  date.setAttribute("id", "review-date");
+  date.setAttribute("class", "review-date");
   li.appendChild(date);
 
   const rating = document.createElement('p');
   rating.innerHTML = `Rating: ${review.rating}`;
   // Add attribute for css
-  rating.setAttribute("id", "review-rating");
+  rating.setAttribute("class", "review-rating");
   li.appendChild(rating);
 
   const comments = document.createElement('p');

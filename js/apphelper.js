@@ -23,7 +23,7 @@ class AppHelper {
   }
 
   /**
-  * @description Service worker init and workflow
+  * @description Service worker init and workflow"
   */
   static startServiceWorker() {
     if ('serviceWorker' in navigator) {

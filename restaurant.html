@@ -37,12 +37,18 @@
     <!-- Beginning restaurant -->
     <section id="restaurant-container">
       <h1 id="restaurant-name"></h1>
-      <picture id="restaurant-picture">
-        <img id="restaurant-img">
-      </picture>
-      <p id="restaurant-cuisine"></p>
-      <p id="restaurant-address"></p>
-      <table id="restaurant-hours"></table>
+      <!-- Beginning two container for flex view 50% on bigger viewport -->
+      <div class="restaurant-bigvieport">
+        <picture id="restaurant-picture">
+          <img id="restaurant-img">
+        </picture>
+      </div>
+      <div class="restaurant-bigvieport">
+        <p id="restaurant-cuisine"></p>
+        <p id="restaurant-address"></p>
+        <table id="restaurant-hours"></table>
+      </div>
+      <!-- End create two container for flex view 50% on bigger viewport -->
     </section>
     <!-- end restaurant -->
     <!-- Beginning reviews -->
