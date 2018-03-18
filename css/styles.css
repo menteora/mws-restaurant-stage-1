@@ -12,7 +12,7 @@ body {
 	margin: 0;
 	position:relative;
 }
-ul, li {
+.filter-options, article {
 	font-family: 'Roboto', sans-serif;
 	font-size: 10pt;
   color: #333;
@@ -145,7 +145,7 @@ nav h1 a {
   display: flex;
   flex-wrap: wrap;
 }
-#restaurants-list li {
+#restaurants-list article {
   margin: 15px auto;
   max-width: 250px;
   background-color: #fff;
@@ -161,7 +161,7 @@ nav h1 a {
   max-width: 100%;
   min-width: 100%;
 }
-#restaurants-list li h1 {
+#restaurants-list article h3 {
   color: #f18200;
   font-family: Arial,sans-serif;
   font-size: 14pt;
@@ -175,7 +175,7 @@ nav h1 a {
   margin: 0;
   font-size: 11pt;
 }
-#restaurants-list li a {
+#restaurants-list article a {
   background-color: orange;
   border-bottom: 3px solid #eee;
   color: #fff;
