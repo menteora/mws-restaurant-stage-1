@@ -69,7 +69,7 @@ nav h1 {
 }
 nav h1 a {
   color: #fff;
-  font-size: 14pt;
+  font-size: 28px;
   font-weight: 200;
   letter-spacing: 10px;
   text-transform: uppercase;
@@ -127,7 +127,7 @@ nav h1 a {
 .filter-options select {
   background-color: white;
   border: 1px solid #fff;
-  font-family: Arial,sans-serif;
+  /*font-family: Arial,sans-serif;*/
   font-size: 11pt;
   height: 35px;
   letter-spacing: 0;
@@ -150,7 +150,7 @@ nav h1 a {
   max-width: 250px;
   background-color: #fff;
   border: 2px solid #ccc;
-  font-family: Arial,sans-serif;
+  /*font-family: Arial,sans-serif;*/
   text-align: left;
   padding: 1.5em;
 }
@@ -163,9 +163,7 @@ nav h1 a {
 }
 #restaurants-list article h3 {
   color: #f18200;
-  font-family: Arial,sans-serif;
   font-size: 14pt;
-  font-weight: 200;
   letter-spacing: 0;
   line-height: 1.3;
   margin: 20px 0 10px;
@@ -175,17 +173,24 @@ nav h1 a {
   margin: 0;
   font-size: 11pt;
 }
+/* Align botton inside cards */
+#restaurants-list p:last-of-type {
+  min-height: 40px;
+}
 #restaurants-list article a {
   background-color: orange;
   border-bottom: 3px solid #eee;
   color: #fff;
   display: inline-block;
-  font-size: 10pt;
+  font-size: 12pt;
   margin: 15px 0 0;
-  padding: 1.5em;
+  padding: 1.5em 0;
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
+  width: 100%;
+  letter-spacing: 3px;
+  font-weight: bold;
 }
 
 /* ====================== Restaurant Details ====================== */
@@ -202,7 +207,7 @@ nav h1 a {
 }
 #restaurant-name {
   color: #f18200;
-  font-family: Arial,sans-serif;
+  /*font-family: Arial,sans-serif;*/
   font-size: 20pt;
   font-weight: 200;
   letter-spacing: 0;
@@ -229,6 +234,7 @@ nav h1 a {
   text-align: center;
   text-transform: uppercase;
   max-width: 100%;
+  font-weight: bold;
 }
 #restaurant-container, #reviews-container {
   border-bottom: 1px solid #d9d9d9;
