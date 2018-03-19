@@ -119,8 +119,8 @@ nav h1 a {
 }
 .filter-options h2 {
   color: white;
-  font-size: 1rem;
-  font-weight: normal;
+  font-size: 1.5em;
+  letter-spacing: 1px;
   line-height: 1;
   margin: 0 20px;
 }
@@ -150,7 +150,6 @@ nav h1 a {
   max-width: 250px;
   background-color: #fff;
   border: 2px solid #ccc;
-  /*font-family: Arial,sans-serif;*/
   text-align: left;
   padding: 1.5em;
 }
@@ -192,7 +191,6 @@ nav h1 a {
   letter-spacing: 3px;
   font-weight: bold;
 }
-
 /* ====================== Restaurant Details ====================== */
 .inside #map-container {
   background: blue none repeat scroll 0 0;

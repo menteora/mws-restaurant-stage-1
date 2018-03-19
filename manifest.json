@@ -1,5 +1,6 @@
 {
     "name": "Restaurant Reviews",
+    "short_name": "Restaurants",
     "scope": "/",
     "display": "standalone",
     "start_url": "/"
