@@ -139,7 +139,6 @@ nav h1 a {
 /* ====================== Restaurant Listing ====================== */
 #restaurants-list {
   background-color: #f3f3f3;
-  list-style: outside none none;
   margin: 0;
   text-align: center;
   display: flex;
