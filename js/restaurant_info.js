@@ -67,7 +67,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   // Standard image is resized to maximum 600px
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img';
-  image.alt = '';
+  image.alt = image.alt = `Picture of ${restaurant.name} restaurant`;
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
 
   // Insert source before image
