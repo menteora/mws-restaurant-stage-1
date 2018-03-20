@@ -59,15 +59,15 @@ header {
   width: 100%;
 }
 /* ====================== Navigation ====================== */
-nav {
+#homepage {
   background-color: #252831;
   text-align:center;
   padding: 1.5em;
 }
-nav h1 {
+#homepage h1 {
   margin: auto;
 }
-nav h1 a {
+#homepage h1 a {
   color: #fff;
   font-size: 28px;
   font-weight: 200;

@@ -8,7 +8,7 @@
   <!-- Main CSS file -->
   <link rel="stylesheet" href="css/styles.css" type="text/css">
   <link rel="manifest" href="manifest.json">
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Restaurant Info</title>
 </head>
 
@@ -16,13 +16,19 @@
   <!-- Beginning header -->
   <header>
     <!-- Beginning nav -->
-    <nav>
-      <h1><a href="/">Restaurant Reviews</a></h1>
+    <nav id="homepage">
+      <h1>
+        <a href="/">Restaurant Reviews</a>
+      </h1>
     </nav>
     <!-- Beginning breadcrumb -->
-    <ul id="breadcrumb" >
-      <li><a href="/">Home</a></li>
-    </ul>
+    <nav aria-label="Breadcrumb">
+      <ul id="breadcrumb">
+        <li>
+          <a href="/">Home</a>
+        </li>
+      </ul>
+    </nav>
     <!-- End breadcrumb -->
     <!-- End nav -->
   </header>
@@ -62,7 +68,10 @@
 
   <!-- Beginning footer -->
   <footer id="footer">
-    Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
+    Copyright (c) 2017
+    <a href="/">
+      <strong>Restaurant Reviews</strong>
+    </a> All Rights Reserved.
   </footer>
   <!-- End footer -->
 
