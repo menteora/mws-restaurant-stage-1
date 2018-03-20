@@ -12,17 +12,6 @@ class AppHelper {
   }
 
   /**
-  * @description Remove map-container from page, the tag is fixed
-  */
-  static offineRemoveMap() {
-    if ('serviceWorker' in navigator) {
-      if (!navigator.onLine) {
-        document.getElementById('map-container').style.display = "none";
-      }
-    }
-  }
-
-  /**
   * @description Service worker init and workflow"
   */
   static startServiceWorker() {
@@ -72,7 +61,6 @@ class AppHelper {
         window.location.reload();
         refreshing = true;
       });
-      this.offineRemoveMap();
     }
   }
 }
