@@ -62,13 +62,13 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   // Use small image from 0 to 400px
   const source = document.createElement('source');
   source.media = '(max-width: 400px)';
-  source.srcset = AppHelper.setSuffixToFile(DBHelper.imageUrlForRestaurant(restaurant),'-300');
+  source.srcset = AppHelper.setSuffixToFileAndJpgExtension(DBHelper.imageUrlForRestaurant(restaurant),'-300');
 
   // Standard image is resized to maximum 600px
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img';
   image.alt = `Picture of ${restaurant.name} restaurant`;
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.src = AppHelper.setSuffixToFileAndJpgExtension(DBHelper.imageUrlForRestaurant(restaurant));
 
   // Insert source before image
   picture.insertBefore(source, image);

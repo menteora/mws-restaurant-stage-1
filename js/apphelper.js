@@ -12,6 +12,15 @@ class AppHelper {
   }
 
   /**
+  * @description Change image suffix name based on string and append jpg extension
+  * @param {string} filename - Name of file to change
+  * @param {string} string - Suffix to append
+  */
+ static setSuffixToFileAndJpgExtension(filename, string) {
+  return (string) ? filename + string + '.jpg' : filename + '.jpg';
+}
+
+  /**
   * @description Service worker init and workflow
   */
   static startServiceWorker() {

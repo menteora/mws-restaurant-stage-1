@@ -6,7 +6,7 @@ class DBHelper {
   /**
    * Database URL.
    * Change this to restaurants.json file location on your server.
-   */ 
+   */
   static get DATABASE_URL() {
     return `http://localhost:1337/restaurants`;
   }
@@ -18,14 +18,18 @@ class DBHelper {
     // If the browser doesn't support service worker,
     // we don't care about having a database
     if (!navigator.serviceWorker) {
+      console.log('This browser doesn\'t support Service Worker');
       return Promise.resolve();
+      if (!('indexedDB' in window)) {
+        console.log('This browser doesn\'t support IndexedDB');
+        return Promise.resolve();
+      }
     }
 
-    return idb.open('restaurants', 1, function (upgradeDb) {
-      var store = upgradeDb.createObjectStore('restaurants', {
+    return idb.open('restaurants', 1, upgradeDb => {
+      upgradeDb.createObjectStore('restaurants', {
         keyPath: 'id'
       });
-      //store.createIndex('by-date', 'time');
     });
   }
 
@@ -33,40 +37,33 @@ class DBHelper {
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-    //let xhr = new XMLHttpRequest();
-    //xhr.open('GET', DBHelper.DATABASE_URL);
-    this._dbPromise = this.openDatabase();
-    /*
-    xhr.onload = () => {
-      if (xhr.status === 200) { // Got a success response from server!
-        const json = JSON.parse(xhr.responseText);
-        const restaurants = json.restaurants;
-        callback(null, restaurants);
-      } else { // Oops!. Got an error from server.
-        const error = (`Request failed. Returned status of ${xhr.status}`);
-        callback(error, null);
-      }
-    };
-    xhr.send();
-    */
-    fetch(DBHelper.DATABASE_URL).then(res=>res.json())
-    .then(res => callback(null, res) )
-    .catch (error => callback(error, null) );
-    /*
-    this._dbPromise.then(function (db) {
-      // if we're already showing posts, eg shift-refresh
-      // or the very first load, there's no point fetching
-      // posts from IDB
-      //if (!db || fetch(DBHelper.DATABASE_URL)) return;
 
-      var index = db.transaction('restaurants')
-        //.objectStore('restaurants').index('by-date');
-
-      return index.getAll().then(function (messages) {
-        indexController._postsView.addPosts(messages.reverse());
+    fetch(DBHelper.DATABASE_URL).then(res => {
+      return res.json();
+    })
+    .then(restaurants => {
+      //If online request return data fill idb
+      this.openDatabase().then(function (db) {
+        var tx = db.transaction('restaurants', 'readwrite')
+        var store = tx.objectStore('restaurants');
+        restaurants.forEach(function (restaurant) {
+          store.put(restaurant);
+        });
+        callback(null, restaurants)
       });
+    })
+    .catch(error => {
+      //If online request fails try to catch local idb data
+      this.openDatabase().then(function (db) {
+        var tx = db.transaction('restaurants')
+        var store = tx.objectStore('restaurants');
+        store.getAll().then(restaurants => {
+          callback(null, restaurants)
+        })
+        .catch(error => callback(error, null));
+      })
+      .catch(error => callback(error, null));
     });
-    */
   }
 
   /**
