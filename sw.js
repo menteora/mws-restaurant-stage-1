@@ -16,7 +16,8 @@ self.addEventListener('activate', function(event) {
   );
 });
 self.addEventListener('fetch', function (event) {
-  //if (event.request.url.indexOf(apiUrl) !== -1) { return; }
+  // external api url bypass service worker cache
+  if (event.request.url.indexOf(apiUrl) !== -1) { return; }
 
   event.respondWith(
     caches.open(currentCacheName).then(function (cache) {
