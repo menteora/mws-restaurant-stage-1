@@ -6,17 +6,37 @@ class DBHelper {
   /**
    * Database URL.
    * Change this to restaurants.json file location on your server.
-   */
+   */ 
   static get DATABASE_URL() {
-    return `/data/restaurants.json`;
+    return `http://localhost:1337/restaurants`;
+  }
+
+  /**
+  * @description create or open local idb store
+  */
+  static openDatabase() {
+    // If the browser doesn't support service worker,
+    // we don't care about having a database
+    if (!navigator.serviceWorker) {
+      return Promise.resolve();
+    }
+
+    return idb.open('restaurants', 1, function (upgradeDb) {
+      var store = upgradeDb.createObjectStore('restaurants', {
+        keyPath: 'id'
+      });
+      //store.createIndex('by-date', 'time');
+    });
   }
 
   /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', DBHelper.DATABASE_URL);
+    //let xhr = new XMLHttpRequest();
+    //xhr.open('GET', DBHelper.DATABASE_URL);
+    this._dbPromise = this.openDatabase();
+    /*
     xhr.onload = () => {
       if (xhr.status === 200) { // Got a success response from server!
         const json = JSON.parse(xhr.responseText);
@@ -28,6 +48,25 @@ class DBHelper {
       }
     };
     xhr.send();
+    */
+    fetch(DBHelper.DATABASE_URL).then(res=>res.json())
+    .then(res => callback(null, res) )
+    .catch (error => callback(error, null) );
+    /*
+    this._dbPromise.then(function (db) {
+      // if we're already showing posts, eg shift-refresh
+      // or the very first load, there's no point fetching
+      // posts from IDB
+      //if (!db || fetch(DBHelper.DATABASE_URL)) return;
+
+      var index = db.transaction('restaurants')
+        //.objectStore('restaurants').index('by-date');
+
+      return index.getAll().then(function (messages) {
+        indexController._postsView.addPosts(messages.reverse());
+      });
+    });
+    */
   }
 
   /**
@@ -161,7 +200,8 @@ class DBHelper {
       title: restaurant.name,
       url: DBHelper.urlForRestaurant(restaurant),
       map: map,
-      animation: google.maps.Animation.DROP}
+      animation: google.maps.Animation.DROP
+    }
     );
     return marker;
   }
