@@ -3,5 +3,28 @@
     "short_name": "Restaurants",
     "scope": "/",
     "display": "standalone",
-    "start_url": "/"
+    "start_url": "/",
+    "icons": [
+      {
+        "src": "img/mws-restaurants-144.png",
+        "sizes": "144x144",
+        "type": "image/png"
+      },
+      {
+        "src": "img/mws-restaurants-256.png",
+        "sizes": "256x256",
+        "type": "image/png"
+      },
+      {
+        "src": "img/mws-restaurants-512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      },
+      {
+        "src": "img/mws-restaurants.svg",
+        "sizes": "72x72 96x96 128x128 144x144 192x192 256x256 512x512",
+        "type": "image/svg"
+      }],
+      "background_color": "#3397DB",
+      "theme_color": "#3397DB"
   }
