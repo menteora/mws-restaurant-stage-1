@@ -16,8 +16,8 @@ class AppHelper {
   * @param {string} filename - Name of file to change
   * @param {string} string - Suffix to append
   */
- static setSuffixToFileAndJpgExtension(filename, string) {
-  return (string) ? filename + string + '.jpg' : filename + '.jpg';
+ static setSuffixToFileAndWebpExtension(filename, string) {
+  return (string) ? filename + string + '.webp' : filename + '.webp';
 }
 
   /**

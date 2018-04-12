@@ -140,7 +140,7 @@ createRestaurantHTML = (restaurant) => {
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   image.alt = `Picture of ${restaurant.name} restaurant`
-  image.src = AppHelper.setSuffixToFileAndJpgExtension(DBHelper.imageUrlForRestaurant(restaurant),'-300');
+  image.src = AppHelper.setSuffixToFileAndWebpExtension(DBHelper.imageUrlForRestaurant(restaurant),'-300');
   li.append(image);
 
   const name = document.createElement('h3');
