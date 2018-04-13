@@ -2,8 +2,35 @@ let restaurant;
 var map;
 
 /**
- * Initialize Google map, called from HTML.
+ * Fetch restaurant as the page is loaded.
  */
+document.addEventListener('DOMContentLoaded', (event) => {
+  fetchRestaurantFromURL((error, restaurant) => {
+    if (error) { // Got an error!
+      console.error(error);
+    } else {
+      /*
+      self.map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 16,
+        center: restaurant.latlng,
+        scrollwheel: false
+      });
+      */
+      fillBreadcrumb();
+      const staticmap = document.getElementById("staticmap");
+      staticmap.src = 'https://maps.googleapis.com/maps/api/staticmap?center=40.722216,-73.987501&scale=2&zoom=11&size=512x200&key=AIzaSyBjEzrQVpR768JpvHrJKaHZtd2e_yBD0QM';
+      staticmap.src += `&markers=size:small%7Ccolor:red%7C${self.restaurant.latlng.lat},${self.restaurant.latlng.lng}`;
+      //DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
+      // Init service worker
+      AppHelper.startServiceWorker();
+    }
+  });
+});
+
+
+/**
+ * Initialize Google map, called from HTML.
+
 window.initMap = () => {
   fetchRestaurantFromURL((error, restaurant) => {
     if (error) { // Got an error!
@@ -21,7 +48,7 @@ window.initMap = () => {
     }
   });
 }
-
+*/
 /**
  * Get current restaurant from page URL.
  */

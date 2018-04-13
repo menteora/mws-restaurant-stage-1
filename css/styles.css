@@ -106,8 +106,8 @@ header {
     text-decoration: underline;
 }
 /* ====================== Map ====================== */
-#map {
-  height: 400px;
+#staticmap {
+  height: 100%;
   width: 100%;
   background-color: #ccc;
 }
@@ -191,12 +191,6 @@ header {
   font-weight: bold;
 }
 /* ====================== Restaurant Details ====================== */
-.inside #map-container {
-  background: blue none repeat scroll 0 0;
-  height: 400px;
-  right: 0;
-  top: 80px;
-}
 .inside #map {
   background-color: #ccc;
   height: 100%;

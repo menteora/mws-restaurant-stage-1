@@ -8,6 +8,7 @@ var markers = []
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {
+  updateRestaurants();
   fetchNeighborhoods();
   fetchCuisines();
 });
@@ -69,7 +70,7 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
 
 /**
  * Initialize Google map, called from HTML.
- */
+
 window.initMap = () => {
   let loc = {
     lat: 40.722216,
@@ -82,7 +83,7 @@ window.initMap = () => {
   });
   updateRestaurants();
 }
-
+ */
 /**
  * Update page and map for current restaurants.
  */
@@ -128,10 +129,13 @@ resetRestaurants = (restaurants) => {
  */
 fillRestaurantsHTML = (restaurants = self.restaurants) => {
   const ul = document.getElementById('restaurants-list');
+  const staticmap = document.getElementById("staticmap");
+  staticmap.src = 'https://maps.googleapis.com/maps/api/staticmap?center=40.722216,-73.987501&scale=2&zoom=11&size=512x200&key=AIzaSyBjEzrQVpR768JpvHrJKaHZtd2e_yBD0QM';
   restaurants.forEach(restaurant => {
     ul.append(createRestaurantHTML(restaurant));
+    staticmap.src += `&markers=size:small%7Ccolor:red%7C${restaurant.latlng.lat},${restaurant.latlng.lng}`;
   });
-  addMarkersToMap();
+  //addMarkersToMap();
 }
 
 /**
@@ -169,7 +173,7 @@ createRestaurantHTML = (restaurant) => {
 
 /**
  * Add markers for current restaurants to the map.
- */
+
 addMarkersToMap = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {
     // Add marker to the map
@@ -180,7 +184,7 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     self.markers.push(marker);
   });
 }
-
+ */
 /**
  * Service Worker Check
  */
