@@ -9,10 +9,24 @@ document.addEventListener('DOMContentLoaded', (event) => {
     if (error) { // Got an error!
       console.error(error);
     } else {
-      fillBreadcrumb();
-      const staticmap = document.getElementById("staticmap");
-      staticmap.src = 'https://maps.googleapis.com/maps/api/staticmap?center=40.722216,-73.987501&scale=2&zoom=11&size=512x200&key=AIzaSyBjEzrQVpR768JpvHrJKaHZtd2e_yBD0QM';
-      staticmap.src += `&markers=size:small%7Ccolor:red%7C${self.restaurant.latlng.lat},${self.restaurant.latlng.lng}`;
+      fillBreadcrumb();      
+      const picture = document.getElementById('staticmap-picture');
+  
+      // Use different maps image from 0 to 400px
+      const source = document.createElement('source');
+      source.media = '(max-width: 550px)';
+      source.srcset = 'https://maps.googleapis.com/maps/api/staticmap?center=40.722216,-73.987501&scale=1&zoom=12&size=550x350&key=AIzaSyBjEzrQVpR768JpvHrJKaHZtd2e_yBD0QM'
+                      + `&markers=size:mid%7Ccolor:red%7C${self.restaurant.latlng.lat},${self.restaurant.latlng.lng}`;
+    
+      // Standard image is resized to maximum 600px
+      const image = document.getElementById('staticmap');
+      image.alt = `${restaurant.name} map`;
+      image.src = 'https://maps.googleapis.com/maps/api/staticmap?center=40.722216,-73.987501&scale=2&zoom=11&size=512x200&key=AIzaSyBjEzrQVpR768JpvHrJKaHZtd2e_yBD0QM'
+      + `&markers=size:small%7Ccolor:red%7C${self.restaurant.latlng.lat},${self.restaurant.latlng.lng}`;
+    
+      // Insert source before image
+      picture.insertBefore(source, image);
+      
       // Init service worker
       AppHelper.startServiceWorker();
     }

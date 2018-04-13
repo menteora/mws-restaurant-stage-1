@@ -113,12 +113,24 @@ resetRestaurants = (restaurants) => {
  */
 fillRestaurantsHTML = (restaurants = self.restaurants) => {
   const ul = document.getElementById('restaurants-list');
-  const staticmap = document.getElementById("staticmap");
-  staticmap.src = 'https://maps.googleapis.com/maps/api/staticmap?center=40.722216,-73.987501&scale=2&zoom=11&size=512x200&key=AIzaSyBjEzrQVpR768JpvHrJKaHZtd2e_yBD0QM';
+  const picture = document.getElementById('staticmap-picture');
+
+  // Use different maps image from 0 to 400px
+  const source = document.createElement('source');
+  source.media = '(max-width: 550px)';
+  source.srcset = 'https://maps.googleapis.com/maps/api/staticmap?center=40.722216,-73.987501&scale=1&zoom=12&size=550x350&key=AIzaSyBjEzrQVpR768JpvHrJKaHZtd2e_yBD0QM'
+  // Standard image is resized to maximum 600px
+  const image = document.getElementById('staticmap');
+  image.src = 'https://maps.googleapis.com/maps/api/staticmap?center=40.722216,-73.987501&scale=2&zoom=11&size=512x200&key=AIzaSyBjEzrQVpR768JpvHrJKaHZtd2e_yBD0QM';
+
   restaurants.forEach(restaurant => {
     ul.append(createRestaurantHTML(restaurant));
-    staticmap.src += `&markers=size:small%7Ccolor:red%7C${restaurant.latlng.lat},${restaurant.latlng.lng}`;
+    source.srcset += `&markers=size:mid%7Ccolor:red%7C${restaurant.latlng.lat},${restaurant.latlng.lng}`;
+    image.src += `&markers=size:small%7Ccolor:red%7C${restaurant.latlng.lat},${restaurant.latlng.lng}`;
   });
+
+  // Insert source before image
+  picture.insertBefore(source, image);
 }
 
 /**
@@ -131,7 +143,7 @@ createRestaurantHTML = (restaurant) => {
   image.alt = `Picture of ${restaurant.name} restaurant`;
   // add blazy for lazy loading images
   image.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
-  image.setAttribute('data-src', AppHelper.setSuffixToFileAndWebpExtension(DBHelper.imageUrlForRestaurant(restaurant),'-300'));
+  image.setAttribute('data-src', AppHelper.setSuffixToFileAndWebpExtension(DBHelper.imageUrlForRestaurant(restaurant), '-300'));
   li.append(image);
 
   const name = document.createElement('h3');
@@ -157,4 +169,4 @@ createRestaurantHTML = (restaurant) => {
 /**
  * Service Worker Check
  */
-  AppHelper.startServiceWorker();
+AppHelper.startServiceWorker();

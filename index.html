@@ -5,7 +5,7 @@
   <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
   <link rel="stylesheet" href="css/styles.css">
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#3397DB"/>
+  <meta name="theme-color" content="#3397DB" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Restaurant Reviews</title>
 </head>
@@ -21,7 +21,9 @@
 
   <main id="maincontent">
     <section id="map-container">
-      <img id="staticmap" aria-label="Map of all restaurants" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="/>
+      <picture id="staticmap-picture">
+        <img id="staticmap" alt="Map of all restaurants" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="/>
+      </picture>
     </section>
     <section>
       <div class="filter-options">
@@ -44,10 +46,10 @@
   <script type="application/javascript" charset="utf-8" src="js/blazy.min.js"></script>
   <script type="application/javascript" charset="utf-8" src="js/main.js"></script>
   <noscript id="deferred-styles">
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700"/>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" />
   </noscript>
   <script>
-    var loadDeferredStyles = function() {
+    var loadDeferredStyles = function () {
       var addStylesNode = document.getElementById("deferred-styles");
       var replacement = document.createElement("div");
       replacement.innerHTML = addStylesNode.textContent;
@@ -55,8 +57,8 @@
       addStylesNode.parentElement.removeChild(addStylesNode);
     };
     var raf = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
-        window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-    if (raf) raf(function() { window.setTimeout(loadDeferredStyles, 0); });
+      window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+    if (raf) raf(function () { window.setTimeout(loadDeferredStyles, 0); });
     else window.addEventListener('load', loadDeferredStyles);
   </script>
   <footer id="footer">
