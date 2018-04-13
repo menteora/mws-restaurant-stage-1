@@ -102,6 +102,8 @@ updateRestaurants = () => {
     } else {
       resetRestaurants(restaurants);
       fillRestaurantsHTML();
+      // Add blazy after html filled
+      var bLazy = new Blazy();
     }
   })
 }
@@ -138,9 +140,11 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
 createRestaurantHTML = (restaurant) => {
   const li = document.createElement('article');
   const image = document.createElement('img');
-  image.className = 'restaurant-img';
-  image.alt = `Picture of ${restaurant.name} restaurant`
-  image.src = AppHelper.setSuffixToFileAndWebpExtension(DBHelper.imageUrlForRestaurant(restaurant),'-300');
+  image.className = 'restaurant-img b-lazy';
+  image.alt = `Picture of ${restaurant.name} restaurant`;
+  // add blazy for lazy loading images
+  image.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+  image.setAttribute('data-src', AppHelper.setSuffixToFileAndWebpExtension(DBHelper.imageUrlForRestaurant(restaurant),'-300'));
   li.append(image);
 
   const name = document.createElement('h3');

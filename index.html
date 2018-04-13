@@ -37,10 +37,12 @@
     </section>
   </main>
 
+
   <script type="application/javascript" charset="utf-8" src="js/idb.js"></script>
   <script type="application/javascript" charset="utf-8" src="js/apphelper.js"></script>
   <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
-  <script type="application/javascript" charset="utf-8" src="js/main.js"></script>
+  <script type="application/javascript" charset="utf-8" src="js/blazy.min.js"></script>
+  <script async defer type="application/javascript" charset="utf-8" src="js/main.js"></script>
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrdTV5l0YZTqjxqZVuEgBLYpyu2B35OX4&libraries=places&callback=initMap"></script>
   <noscript id="deferred-styles">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700"/>
@@ -58,7 +60,6 @@
     if (raf) raf(function() { window.setTimeout(loadDeferredStyles, 0); });
     else window.addEventListener('load', loadDeferredStyles);
   </script>
-
   <footer id="footer">
     Copyright (c) 2017
     <a href="/">
