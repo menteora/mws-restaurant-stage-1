@@ -41,29 +41,29 @@ class DBHelper {
     fetch(DBHelper.DATABASE_URL).then(res => {
       return res.json();
     })
-    .then(restaurants => {
-      //If online request return data fill idb
-      this.openDatabase().then(function (db) {
-        var tx = db.transaction('restaurants', 'readwrite')
-        var store = tx.objectStore('restaurants');
-        restaurants.forEach(function (restaurant) {
-          store.put(restaurant);
-        });
-        callback(null, restaurants)
-      });
-    })
-    .catch(error => {
-      //If online request fails try to catch local idb data
-      this.openDatabase().then(function (db) {
-        var tx = db.transaction('restaurants')
-        var store = tx.objectStore('restaurants');
-        store.getAll().then(restaurants => {
+      .then(restaurants => {
+        //If online request return data fill idb
+        this.openDatabase().then(function (db) {
+          var tx = db.transaction('restaurants', 'readwrite')
+          var store = tx.objectStore('restaurants');
+          restaurants.forEach(function (restaurant) {
+            store.put(restaurant);
+          });
           callback(null, restaurants)
-        })
-        .catch(error => callback(error, null));
+        });
       })
-      .catch(error => callback(error, null));
-    });
+      .catch(error => {
+        //If online request fails try to catch local idb data
+        this.openDatabase().then(function (db) {
+          var tx = db.transaction('restaurants')
+          var store = tx.objectStore('restaurants');
+          store.getAll().then(restaurants => {
+            callback(null, restaurants)
+          })
+            .catch(error => callback(error, null));
+        })
+          .catch(error => callback(error, null));
+      });
   }
 
   /**
@@ -82,6 +82,32 @@ class DBHelper {
           callback('Restaurant does not exist', null);
         }
       }
+    });
+  }
+
+  /**
+   * Toogle favorite restaurant
+   * @param {string} id - Id of the restaurant
+   * @param {boolean} starred - Current state of favorite restaurant id
+   */
+  static toogleStar(id, starred) {
+    const favorite = starred == "true"
+    return fetch(`${DBHelper.DATABASE_URL}/${id}/?is_favorite=${!favorite}`, {
+      method: "PUT"
+    }).then((result) => {
+      return result.json();
+    }).then((data) => {
+      console.log(data);
+      this.openDatabase().then((db) => {
+        if (!db) return;
+        let tx = db.transaction('restaurants', 'readwrite');
+        let store = tx.objectStore('restaurants');
+        store.put(data);
+      });
+      return data;
+    }).catch((result) => {
+      console.log(result);
+      return result;
     });
   }
 

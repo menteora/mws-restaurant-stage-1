@@ -173,7 +173,7 @@ header {
 }
 /* Align botton inside cards */
 #restaurants-list p:last-of-type {
-  min-height: 40px;
+  min-height: 45px;
 }
 #restaurants-list article a {
   background-color: #FFB833;
@@ -186,9 +186,19 @@ header {
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
-  width: 100%;
+  width: 80%;
   letter-spacing: 3px;
   font-weight: bold;
+}
+
+#restaurants-list article a.star {
+  width: 18%;
+  margin-left: 2%;
+}
+
+#button-container {
+  display: flex;
+  flex-wrap: wrap;
 }
 /* ====================== Restaurant Details ====================== */
 .inside #map {

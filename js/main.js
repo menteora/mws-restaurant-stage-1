@@ -137,33 +137,62 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
  * Create restaurant HTML.
  */
 createRestaurantHTML = (restaurant) => {
-  const li = document.createElement('article');
+  const article = document.createElement('article');
   const image = document.createElement('img');
   image.className = 'restaurant-img b-lazy';
   image.alt = `Picture of ${restaurant.name} restaurant`;
   // add blazy for lazy loading images
   image.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
   image.setAttribute('data-src', AppHelper.setSuffixToFileAndWebpExtension(DBHelper.imageUrlForRestaurant(restaurant), '-300'));
-  li.append(image);
+  article.append(image);
 
   const name = document.createElement('h3');
   name.innerHTML = restaurant.name;
-  li.append(name);
+  article.append(name);
 
   const neighborhood = document.createElement('p');
   neighborhood.innerHTML = restaurant.neighborhood;
-  li.append(neighborhood);
+  article.append(neighborhood);
 
   const address = document.createElement('p');
   address.innerHTML = restaurant.address;
-  li.append(address);
+  article.append(address);
+
+
+  const buttonContainer = document.createElement('div');
+  buttonContainer.id = "button-container";
 
   const more = document.createElement('a');
+  more.className = "details"
   more.innerHTML = 'View Details';
   more.href = DBHelper.urlForRestaurant(restaurant);
-  li.append(more);
+  buttonContainer.append(more);
 
-  return li;
+  const star = document.createElement('a');
+  star.className = "star";
+  const starred = restaurant.is_favorite == "true"
+  star.innerHTML = (starred) ? "✭" : "✩";
+  star.href = 'javascript:void(0)';
+  star.addEventListener('click', function () {
+
+    DBHelper.toogleStar(restaurant.id, restaurant.is_favorite)
+      .then((response) => {
+        //alert(response);
+        this.innerHTML = (response.is_favorite) ? "✭" : "✩";
+        //this.restaurant.is_favorite = (response.is_favorite) ? true : false;
+      })
+      .catch((error) => {
+        alert(error);
+      });
+
+    //DBHelper.toggleFavoriteRestaurant(restaurant.id);
+    //const toogleStar = document.getElementById('restaurants-list');
+
+  });
+  buttonContainer.append(star);
+  article.append(buttonContainer);
+
+  return article;
 }
 
 /**
