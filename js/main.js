@@ -170,7 +170,7 @@ createRestaurantHTML = (restaurant) => {
 
   const star = document.createElement('a');
   star.className = "star";
-  const starred = restaurant.is_favorite == "true"
+  const starred = restaurant.is_favorite == "true";
   star.innerHTML = (starred) ? "✭" : "✩";
   star.href = 'javascript:void(0)';
   star.addEventListener('click', function () {

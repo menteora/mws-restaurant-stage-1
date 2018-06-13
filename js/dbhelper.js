@@ -42,8 +42,25 @@ class DBHelper {
       return res.json();
     })
       .then(restaurants => {
+        callback(null, restaurants);
+      })
+      .catch(error => {
+        callback(error, null);
+      });
+  }
+
+  static fetchRestaurantsBackup(callback) {
+
+    fetch(DBHelper.DATABASE_URL).then(res => {
+      return res.json();
+    })
+      .then(restaurants => {
         //If online request return data fill idb
-        this.openDatabase().then(function (db) {
+        idb.open('restaurants', 1, upgradeDb => {
+          upgradeDb.createObjectStore('restaurants', {
+            keyPath: 'id'
+          });
+        }).then(function (db) {
           var tx = db.transaction('restaurants', 'readwrite')
           var store = tx.objectStore('restaurants');
           restaurants.forEach(function (restaurant) {
@@ -54,7 +71,11 @@ class DBHelper {
       })
       .catch(error => {
         //If online request fails try to catch local idb data
-        this.openDatabase().then(function (db) {
+        idb.open('restaurants', 1, upgradeDb => {
+          upgradeDb.createObjectStore('restaurants', {
+            keyPath: 'id'
+          });
+        }).then(function (db) {
           var tx = db.transaction('restaurants')
           var store = tx.objectStore('restaurants');
           store.getAll().then(restaurants => {
@@ -65,6 +86,7 @@ class DBHelper {
           .catch(error => callback(error, null));
       });
   }
+
 
   /**
    * Fetch a restaurant by its ID.
