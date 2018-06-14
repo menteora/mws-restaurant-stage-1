@@ -1,7 +1,6 @@
 importScripts('js/idb.js');
-importScripts('js/dbhelper.js');
 
-var currentCacheName = 'mws-restaurant-dynamic-v40';
+var currentCacheName = 'mws-restaurant-dynamic-v41';
 var apiUrl = 'http://localhost:1337/restaurants';
 
 self.addEventListener('activate', function (event) {
@@ -41,7 +40,12 @@ self.addEventListener('fetch', function (event) {
             var store = tx.objectStore('restaurants');
             // update restaurants
             restaurantsOnline.forEach(function (restaurant) {
-              store.put(restaurant);
+              // check if restaurants need sync and bypass it
+              store.get(parseInt(restaurant.id)).then((data) => {
+                if (!data.needs_sync) {
+                  store.put(data);
+                }
+              });
             });
             return new Response(JSON.stringify(restaurantsOnline), { "status": 200, headers: { 'Content-Type': 'application/json' } });
           }).catch(function (error) {
@@ -55,7 +59,7 @@ self.addEventListener('fetch', function (event) {
     // prevent two fetches
     return;
   }
-  //console.log("THIRD URL:" + event.request.url);
+  // return cached files
   event.respondWith(
     caches.open(currentCacheName).then(function (cache) {
       return cache.match(event.request).then(function (response) {
