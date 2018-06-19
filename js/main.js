@@ -170,16 +170,14 @@ createRestaurantHTML = (restaurant) => {
 
   const star = document.createElement('a');
   star.className = "star";
-  const starred = restaurant.is_favorite == "true";
-  star.innerHTML = (starred) ? "✭" : "✩";
+  star.innerHTML = (JSON.parse(restaurant.is_favorite)) ? "✭" : "✩";
   star.href = 'javascript:void(0)';
   star.addEventListener('click', function () {
 
     DBHelper.toogleStar(restaurant.id, restaurant.is_favorite)
-      .then((response) => {
-        //alert(response);
-        this.innerHTML = (response.is_favorite) ? "✭" : "✩";
-        //this.restaurant.is_favorite = (response.is_favorite) ? true : false;
+      .then((data) => {
+        this.innerHTML = (JSON.parse(data)) ? "✭" : "✩";
+        restaurant.is_favorite = (JSON.parse(data)) ? 'true' : 'false';
       })
       .catch((error) => {
         alert(error);

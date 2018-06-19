@@ -113,23 +113,13 @@ class DBHelper {
    * @param {boolean} starred - Current state of favorite restaurant id
    */
   static toogleStar(id, starred) {
-    const favorite = starred == "true"
-    return fetch(`${DBHelper.DATABASE_URL}/${id}/?is_favorite=${!favorite}`, {
+    //const favorite = (starred == "true");
+    return fetch(`${DBHelper.DATABASE_URL}/${id}/?is_favorite=${!JSON.parse(starred)}`, {
       method: "PUT"
-    }).then((result) => {
-      return result.json();
+    }).then((response) => {
+      return response.json();
     }).then((data) => {
-      console.log(data);
-      this.openDatabase().then((db) => {
-        if (!db) return;
-        let tx = db.transaction('restaurants', 'readwrite');
-        let store = tx.objectStore('restaurants');
-        store.put(data);
-      });
-      return data;
-    }).catch((result) => {
-      console.log(result);
-      return result;
+      return data.is_favorite;
     });
   }
 
