@@ -43,16 +43,20 @@ self.addEventListener('fetch', function (event) {
             var tx = db.transaction('restaurants', 'readwrite')
             var store = tx.objectStore('restaurants');
             // update restaurants
-            restaurantsOnline.forEach(function (restaurantOnline) {
+            restaurantsOnline.forEach(function (restaurantOnline, index, restaurants) {
               // check if restaurants need sync and bypass it
-              store.get(parseInt(restaurantOnline.id)).then((restaurantOffline) => {
+              store.get(parseInt(restaurantOnline.id)).then(restaurantOffline => {
                 if (!restaurantOffline.needs_sync) {
                   store.put(restaurantOnline);
+                } else {
+                  restaurants[index] = restaurantOffline;
+                  console.log('log1:' + restaurants[0].is_favorite);
                 }
               }).catch((error) => {
                 store.put(restaurantOnline);
               });
             });
+            console.log('log2:' + restaurantsOnline[0].is_favorite);
             return new Response(JSON.stringify(restaurantsOnline), { "status": 200, headers: { 'Content-Type': 'application/json' } });
           }).catch(function (error) {
             // fetch offline
@@ -80,7 +84,6 @@ self.addEventListener('fetch', function (event) {
           return response.json();
         }).then(function (restaurantOnline) {
           // fetch online
-          console.log("put favorite online");
           var tx = db.transaction('restaurants', 'readwrite')
           var store = tx.objectStore('restaurants');
           store.put(restaurantOnline);
@@ -88,12 +91,20 @@ self.addEventListener('fetch', function (event) {
         }).catch(function (error) {
           // fetch offline
           console.log("put favorite offline");
+          const currentUrl = new URL(event.request.url);
+          const isFavorite = currentUrl.searchParams.get('is_favorite');
+          const mainPathUrl = currentUrl.pathname.split('/')[1];
+          const restaurantsId = currentUrl.pathname.split('/')[2];
+
           var tx = db.transaction('restaurants', 'readwrite')
           var store = tx.objectStore('restaurants');
-          console.log(JSON.stringify(error));
-          //restaurantOffline.needs_sync = true;
-          //store.put(restaurantOffline);
-          return new Response(JSON.stringify(restaurantOffline), { "status": 200, headers: { 'Content-Type': 'application/json' } })
+
+          return store.get(parseInt(restaurantsId)).then((restaurantOffline) => {
+            restaurantOffline.needs_sync = true;
+            restaurantOffline.is_favorite = isFavorite;
+            store.put(restaurantOffline);
+            return new Response(JSON.stringify(restaurantOffline), { "status": 200, headers: { 'Content-Type': 'application/json' } })
+          });
         });
       })
     );

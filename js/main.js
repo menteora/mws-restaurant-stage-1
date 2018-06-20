@@ -182,10 +182,6 @@ createRestaurantHTML = (restaurant) => {
       .catch((error) => {
         alert(error);
       });
-
-    //DBHelper.toggleFavoriteRestaurant(restaurant.id);
-    //const toogleStar = document.getElementById('restaurants-list');
-
   });
   buttonContainer.append(star);
   article.append(buttonContainer);
