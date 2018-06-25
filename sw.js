@@ -43,6 +43,7 @@ self.addEventListener('fetch', function (event) {
             var tx = db.transaction('restaurants', 'readwrite')
             var store = tx.objectStore('restaurants');
             // update restaurants
+            /*
             restaurantsOnline.forEach(function (restaurantOnline, index, restaurants) {
               // check if restaurants need sync and bypass it
               store.get(parseInt(restaurantOnline.id)).then(restaurantOffline => {
@@ -56,8 +57,36 @@ self.addEventListener('fetch', function (event) {
                 store.put(restaurantOnline);
               });
             });
-            console.log('log2:' + restaurantsOnline[0].is_favorite);
-            return new Response(JSON.stringify(restaurantsOnline), { "status": 200, headers: { 'Content-Type': 'application/json' } });
+*/
+            var promises = restaurantsOnline.map(function(restaurantOnline){
+              return store.get(parseInt(restaurantOnline.id)).then(restaurantOffline => {
+                if (restaurantOffline.needs_sync == 0) {
+                  if(restaurantOnline.id == 1) {
+                  console.log('log ONLINE:' + restaurantOffline.is_favorite);
+                  console.log('log ONLINE:' + restaurantOffline.needs_sync);
+                  }
+                  store.put(restaurantOnline);
+                  return restaurantOnline;
+                } else {
+                  if(restaurantOnline.id == 1) {
+                  console.log('log OFFLINE:' + restaurantOffline.is_favorite);
+                  console.log('log OFFLINE:' + restaurantOffline.needs_sync);
+                  }
+                  return restaurantOffline;
+                }
+              }).catch((error) => {
+                if(restaurantOnline.id == 1) {
+                console.log('log ERROR:' + restaurantOnline.is_favorite);
+                }
+                store.put(restaurantOnline);
+                return restaurantOnline;
+              });
+            })
+            return Promise.all(promises).then(function(results) {
+                console.log(results)
+                return new Response(JSON.stringify(results), { "status": 200, headers: { 'Content-Type': 'application/json' } });
+              })
+
           }).catch(function (error) {
             // fetch offline
             console.log("fetch restaurants offline");
@@ -93,14 +122,14 @@ self.addEventListener('fetch', function (event) {
           console.log("put favorite offline");
           const currentUrl = new URL(event.request.url);
           const isFavorite = currentUrl.searchParams.get('is_favorite');
-          const mainPathUrl = currentUrl.pathname.split('/')[1];
+          //const mainPathUrl = currentUrl.pathname.split('/')[1];
           const restaurantsId = currentUrl.pathname.split('/')[2];
 
           var tx = db.transaction('restaurants', 'readwrite')
           var store = tx.objectStore('restaurants');
 
           return store.get(parseInt(restaurantsId)).then((restaurantOffline) => {
-            restaurantOffline.needs_sync = true;
+            restaurantOffline.needs_sync = 1;
             restaurantOffline.is_favorite = isFavorite;
             store.put(restaurantOffline);
             return new Response(JSON.stringify(restaurantOffline), { "status": 200, headers: { 'Content-Type': 'application/json' } })
