@@ -174,7 +174,7 @@ createRestaurantHTML = (restaurant) => {
   star.href = 'javascript:void(0)';
   star.addEventListener('click', function () {
 
-    DBHelper.toogleStar(restaurant.id, restaurant.is_favorite)
+    DBHelper.toggleStar(restaurant.id, restaurant.is_favorite)
       .then((data) => {
         this.innerHTML = (JSON.parse(data)) ? "✭" : "✩";
         restaurant.is_favorite = (JSON.parse(data)) ? 'true' : 'false';
