@@ -43,41 +43,15 @@ self.addEventListener('fetch', function (event) {
             var tx = db.transaction('restaurants', 'readwrite')
             var store = tx.objectStore('restaurants');
             // update restaurants
-            /*
-            restaurantsOnline.forEach(function (restaurantOnline, index, restaurants) {
-              // check if restaurants need sync and bypass it
-              store.get(parseInt(restaurantOnline.id)).then(restaurantOffline => {
-                if (!restaurantOffline.needs_sync) {
-                  store.put(restaurantOnline);
-                } else {
-                  restaurants[index] = restaurantOffline;
-                  console.log('log1:' + restaurants[0].is_favorite);
-                }
-              }).catch((error) => {
-                store.put(restaurantOnline);
-              });
-            });
-*/
             var promises = restaurantsOnline.map(function(restaurantOnline){
               return store.get(parseInt(restaurantOnline.id)).then(restaurantOffline => {
                 if (restaurantOffline.needs_sync == 0) {
-                  if(restaurantOnline.id == 1) {
-                  console.log('log ONLINE:' + restaurantOffline.is_favorite);
-                  console.log('log ONLINE:' + restaurantOffline.needs_sync);
-                  }
                   store.put(restaurantOnline);
                   return restaurantOnline;
                 } else {
-                  if(restaurantOnline.id == 1) {
-                  console.log('log OFFLINE:' + restaurantOffline.is_favorite);
-                  console.log('log OFFLINE:' + restaurantOffline.needs_sync);
-                  }
                   return restaurantOffline;
                 }
               }).catch((error) => {
-                if(restaurantOnline.id == 1) {
-                console.log('log ERROR:' + restaurantOnline.is_favorite);
-                }
                 store.put(restaurantOnline);
                 return restaurantOnline;
               });
