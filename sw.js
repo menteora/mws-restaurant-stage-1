@@ -1,6 +1,6 @@
 importScripts('js/idb.js');
 
-var currentCacheName = 'mws-restaurant-dynamic-v60';
+var currentCacheName = 'mws-restaurant-dynamic-v61';
 var restaurantGetUrl = 'http://localhost:1337/restaurants';
 var favoriteBasePutUrl = 'http://localhost:1337/restaurants';
 var favoritePutUrl = '/?is_favorite=';
@@ -91,7 +91,7 @@ self.addEventListener('fetch', function (event) {
                 return new Response(JSON.stringify(results), { "status": 200, headers: { 'Content-Type': 'application/json' } });
               })
 
-          }).catch(function (error) {favorite
+          }).catch(function (error) {
             // fetch offline
             console.log("fetch restaurants offline");
             return new Response(JSON.stringify(restaurantsOffline), { "status": 200, headers: { 'Content-Type': 'application/json' } })
@@ -136,7 +136,11 @@ self.addEventListener('fetch', function (event) {
             restaurantOffline.needs_sync = 1;
             restaurantOffline.is_favorite = isFavorite;
             store.put(restaurantOffline);
-            return new Response(JSON.stringify(restaurantOffline), { "status": 200, headers: { 'Content-Type': 'application/json' } })
+
+            return self.registration.sync.register('sync-favorite').then(() => {
+              console.log('Registered sync favorite');
+              return new Response(JSON.stringify(restaurantOffline), { "status": 200, headers: { 'Content-Type': 'application/json' } })
+            });
           });
         });
       })

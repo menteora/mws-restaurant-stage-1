@@ -120,20 +120,7 @@ class DBHelper {
     }).then((response) => {
       return response.json();
     }).then((data) => {
-      if (navigator.serviceWorker) {
-        return navigator.serviceWorker.ready.then(function (reg) {
-          return reg.sync.register('sync-favorite').then(() => {
-            console.log('Registered sync favorite');
-            return data.is_favorite;
-          }).catch((error)=> {
-            console.log(error);
-            return data.is_favorite;
-          });
-        });
-      }else{
-        return data.is_favorite;
-      }
-
+      return data.is_favorite;
     });
   }
 
