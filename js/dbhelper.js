@@ -4,14 +4,6 @@
 class DBHelper {
 
   /**
-   * Database URL.
-   * Change this to restaurants.json file location on your server.
-   */
-  static get DATABASE_URL() {
-    return `http://localhost:1337/restaurants`;
-  }
-
-  /**
   * @description create or open local idb store
   */
   static openDatabase() {
@@ -39,7 +31,7 @@ class DBHelper {
    */
   static fetchRestaurants(callback) {
 
-    fetch(DBHelper.DATABASE_URL).then(res => {
+    fetch(ConfigHelper.DATABASE_URL).then(res => {
       return res.json();
     })
       .then(restaurants => {
@@ -52,7 +44,7 @@ class DBHelper {
 
   static fetchRestaurantsBackup(callback) {
 
-    fetch(DBHelper.DATABASE_URL).then(res => {
+    fetch(ConfigHelper.DATABASE_URL).then(res => {
       return res.json();
     })
       .then(restaurants => {
@@ -115,7 +107,7 @@ class DBHelper {
    */
   static toggleStar(id, starred) {
     //const favorite = (starred == "true");
-    return fetch(`${DBHelper.DATABASE_URL}/${id}/?is_favorite=${!JSON.parse(starred)}`, {
+    return fetch(`${ConfigHelper.DATABASE_URL}/${id}/?is_favorite=${!JSON.parse(starred)}`, {
       method: "PUT"
     }).then((response) => {
       return response.json();

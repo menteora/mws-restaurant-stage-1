@@ -1,13 +1,13 @@
 importScripts('js/idb.js');
+importScripts('js/confighelper.js');
 
-var currentCacheName = 'mws-restaurant-dynamic-v66';
-var restaurantGetUrl = 'http://localhost:1337/restaurants';
-var favoriteBasePutUrl = 'http://localhost:1337/restaurants';
+var currentCacheName = 'mws-restaurant-dynamic-v75';
 var favoritePutUrl = '/?is_favorite=';
 
 
 function syncFavorite() {
   return new Promise(function (resolve, reject) {
+    console.log('favorite start sync');
     idb.open('restaurants').then((db) => {
       if (!db) return;
       const tx = db.transaction('restaurants', 'readwrite');
@@ -16,7 +16,7 @@ function syncFavorite() {
 
       storeIndex.getAll(1).then(function (restaurants) {
         restaurants.forEach(function (restaurant) {
-          fetch(`http://localhost:1337/restaurants/${restaurant.id}/?is_favorite=${restaurant.is_favorite}`, {
+          fetch(`${ConfigHelper.DATABASE_URL}/${restaurant.id}/?is_favorite=${restaurant.is_favorite}`, {
             method: "PUT"
           }).then(function (response) {
             return response.json();
@@ -25,8 +25,10 @@ function syncFavorite() {
             const store = tx.objectStore('restaurants');
             data.needs_sync = 0;
             store.put(data);
+            console.log(`favorite end sync restaurant ${restaurant.id}`);
             resolve('synced');
           }).catch(function (error) {
+            console.log(`favorite error: ${error}`);
             reject(error);
           });
         });
@@ -51,7 +53,7 @@ self.addEventListener('activate', function (event) {
 });
 self.addEventListener('fetch', function (event) {
   // check if page is a restaurants data
-  if (event.request.url.indexOf(restaurantGetUrl) !== -1 && event.request.method == 'GET') {
+  if (event.request.url.indexOf(ConfigHelper.DATABASE_URL) !== -1 && event.request.method == 'GET') {
     event.respondWith(
       // open db
       idb.open('restaurants', 1, upgradeDb => {
@@ -101,7 +103,7 @@ self.addEventListener('fetch', function (event) {
     return;
   }
   // check if page is a faselfvorite data
-  if (event.request.url.indexOf(favoriteBasePutUrl) !== -1 && event.request.url.indexOf(favoritePutUrl) !== -1 && event.request.method == 'PUT') {
+  if (event.request.url.indexOf(ConfigHelper.DATABASE_URL) !== -1 && event.request.url.indexOf(favoritePutUrl) !== -1 && event.request.method == 'PUT') {
     console.log(event.request.url);
     event.respondWith(
       // open db
@@ -136,7 +138,7 @@ self.addEventListener('fetch', function (event) {
             store.put(restaurantOffline);
 
             return self.registration.sync.register('sync-favorite').then(() => {
-              console.log('Registered sync favorite');
+              console.log('registered sync favorite');
               return new Response(JSON.stringify(restaurantOffline), { "status": 200, headers: { 'Content-Type': 'application/json' } })
             });
           });
@@ -163,15 +165,12 @@ self.addEventListener('fetch', function (event) {
 self.addEventListener('message', function (event) {
   if (event.data.action === 'skipWaiting') {
     self.skipWaiting();
-    console.log('SW skip waiting')
+    console.log('SW skip waiting received')
   }
 });
 
 self.addEventListener('sync', function (event) {
-  console.log('lanciato il listener');
-  console.log(event);
   if (event.tag === 'sync-favorite') {
-    console.log('passatodaqui1');
     event.waitUntil(syncFavorite());
   }
 });
