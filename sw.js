@@ -1,9 +1,6 @@
 importScripts('js/idb.js');
+importScripts('js/idbhelper.js');
 importScripts('js/confighelper.js');
-
-var currentCacheName = 'mws-restaurant-dynamic-v75';
-var favoritePutUrl = '/?is_favorite=';
-
 
 function syncFavorite() {
   return new Promise(function (resolve, reject) {
@@ -43,7 +40,7 @@ self.addEventListener('activate', function (event) {
       return Promise.all(
         cacheNames.filter(function (cacheName) {
           return cacheName.startsWith('mws-restaurant-') &&
-            cacheName != currentCacheName;
+            cacheName != ConfigHelper.CURRENT_CACHE_NAME;
         }).map(function (cacheName) {
           return caches.delete(cacheName);
         })
@@ -103,7 +100,7 @@ self.addEventListener('fetch', function (event) {
     return;
   }
   // check if page is a faselfvorite data
-  if (event.request.url.indexOf(ConfigHelper.DATABASE_URL) !== -1 && event.request.url.indexOf(favoritePutUrl) !== -1 && event.request.method == 'PUT') {
+  if (event.request.url.indexOf(ConfigHelper.DATABASE_URL) !== -1 && event.request.url.indexOf(ConfigHelper.FAVORITE_INTERCEPT_PUT_URL) !== -1 && event.request.method == 'PUT') {
     console.log(event.request.url);
     event.respondWith(
       // open db
@@ -151,7 +148,7 @@ self.addEventListener('fetch', function (event) {
   
   // return cached files
   event.respondWith(
-    caches.open(currentCacheName).then(function (cache) {
+    caches.open(ConfigHelper.CURRENT_CACHE_NAME).then(function (cache) {
       return cache.match(event.request).then(function (response) {
         return response || fetch(event.request).then(function (response) {
           cache.put(event.request, response.clone());

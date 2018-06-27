@@ -4,29 +4,6 @@
 class DBHelper {
 
   /**
-  * @description create or open local idb store
-  */
-  static openDatabase() {
-    // If the browser doesn't support service worker,
-    // we don't care about having a database
-    if (!navigator.serviceWorker) {
-      console.log('This browser doesn\'t support Service Worker');
-      return Promise.resolve();
-      if (!('indexedDB' in window)) {
-        console.log('This browser doesn\'t support IndexedDB');
-        return Promise.resolve();
-      }
-    }
-
-    return idb.open('restaurants', 1, upgradeDb => {
-      var restaurantsDb = upgradeDb.createObjectStore('restaurants', {
-        keyPath: 'id'
-      });
-      restaurantsDb.createIndex('needs-sync', 'needs_sync', {unique: false});
-    });
-  }
-
-  /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
@@ -41,45 +18,6 @@ class DBHelper {
         callback(error, null);
       });
   }
-
-  static fetchRestaurantsBackup(callback) {
-
-    fetch(ConfigHelper.DATABASE_URL).then(res => {
-      return res.json();
-    })
-      .then(restaurants => {
-        //If online request return data fill idb
-        idb.open('restaurants', 1, upgradeDb => {
-          upgradeDb.createObjectStore('restaurants', {
-            keyPath: 'id'
-          });
-        }).then(function (db) {
-          var tx = db.transaction('restaurants', 'readwrite')
-          var store = tx.objectStore('restaurants');
-          restaurants.forEach(function (restaurant) {
-            store.put(restaurant);
-          });
-          callback(null, restaurants)
-        });
-      })
-      .catch(error => {
-        //If online request fails try to catch local idb data
-        idb.open('restaurants', 1, upgradeDb => {
-          upgradeDb.createObjectStore('restaurants', {
-            keyPath: 'id'
-          });
-        }).then(function (db) {
-          var tx = db.transaction('restaurants')
-          var store = tx.objectStore('restaurants');
-          store.getAll().then(restaurants => {
-            callback(null, restaurants)
-          })
-            .catch(error => callback(error, null));
-        })
-          .catch(error => callback(error, null));
-      });
-  }
-
 
   /**
    * Fetch a restaurant by its ID.
