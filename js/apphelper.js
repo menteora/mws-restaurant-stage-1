@@ -1,7 +1,7 @@
 class AppHelper {
 
   /**
-  * @description Change image suffix name based on string 
+  * @description Change image suffix name based on string #1
   * @param {string} filename - Name of file to change
   * @param {string} string - Suffix to append
   */
@@ -31,39 +31,21 @@ class AppHelper {
         }
         if (reg.waiting) {
           console.log('SW waiting')
-          var worker = reg.waiting;
-          worker.postMessage({
-            action: 'skipWaiting'
-          });
+          AppHelper.skipWaiting(reg.waiting);
           return;
         }
         if (reg.installing) {
           console.log('SW installing')
-          var worker = reg.installing;
-          worker.addEventListener('statechange', () => {
-            if (worker.state == 'installed') {
-              console.log('SW installed')
-              worker.postMessage({
-                action: 'skipWaiting'
-              });
-            }
-          });
+          AppHelper.trackInstalling(reg.installing);
           return;
         }
         reg.addEventListener('updatefound', () => {
           console.log('SW update found')
-          var worker = reg.installing;
-          worker.addEventListener('statechange', () => {
-            if (worker.state == 'installed') {
-              console.log('SW installed')
-              worker.postMessage({
-                action: 'skipWaiting'
-              });
-            }
-          });
+          AppHelper.trackInstalling(reg.installing);
         });
       });
-      var refreshing;
+
+      let refreshing = false;
       navigator.serviceWorker.addEventListener('controllerchange', function () {
         console.log('SW controllerchange')
         if (refreshing) return;
@@ -72,4 +54,23 @@ class AppHelper {
       });
     }
   }
+
+  /**
+   * @description Skip waiting service worker updates
+   */
+  static skipWaiting(worker) {
+    worker.postMessage({ action: 'skipWaiting' });
+  };
+
+  /**
+   * @description Track service worker installing status
+   */
+  static trackInstalling(worker) {
+    worker.addEventListener('statechange', function () {
+      if (worker.state == 'installed') {
+        console.log('SW installed');
+        AppHelper.skipWaiting(worker);
+      }
+    });
+  };
 }

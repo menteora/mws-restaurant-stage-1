@@ -1,6 +1,6 @@
 importScripts('js/idb.js');
 
-var currentCacheName = 'mws-restaurant-dynamic-v61';
+var currentCacheName = 'mws-restaurant-dynamic-v66';
 var restaurantGetUrl = 'http://localhost:1337/restaurants';
 var favoriteBasePutUrl = 'http://localhost:1337/restaurants';
 var favoritePutUrl = '/?is_favorite=';
@@ -13,7 +13,6 @@ function syncFavorite() {
       const tx = db.transaction('restaurants', 'readwrite');
       const store = tx.objectStore('restaurants');
       const storeIndex = store.index('needs-sync');
-      console.log('passo da qui');
 
       storeIndex.getAll(1).then(function (restaurants) {
         restaurants.forEach(function (restaurant) {
@@ -87,7 +86,6 @@ self.addEventListener('fetch', function (event) {
               });
             })
             return Promise.all(promises).then(function(results) {
-                console.log(results)
                 return new Response(JSON.stringify(results), { "status": 200, headers: { 'Content-Type': 'application/json' } });
               })
 
