@@ -45,7 +45,7 @@ class AppHelper {
         });
       });
 
-      let refreshing = false;
+      let refreshing;
       navigator.serviceWorker.addEventListener('controllerchange', function () {
         console.log('SW controllerchange')
         if (refreshing) return;

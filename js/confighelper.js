@@ -21,6 +21,6 @@ class ConfigHelper {
    * Cache Name.
    */
   static get CURRENT_CACHE_NAME() {
-    return `mws-restaurant-dynamic-v75`;
+    return `mws-restaurant-dynamic-v82`;
   }
 }

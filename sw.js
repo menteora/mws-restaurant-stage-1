@@ -2,6 +2,8 @@ importScripts('js/idb.js');
 importScripts('js/idbhelper.js');
 importScripts('js/confighelper.js');
 
+currentCacheName = 'mws-restaurant-dynamic-v88';
+
 function syncFavorite() {
   return new Promise(function (resolve, reject) {
     console.log('favorite start sync');
@@ -40,7 +42,7 @@ self.addEventListener('activate', function (event) {
       return Promise.all(
         cacheNames.filter(function (cacheName) {
           return cacheName.startsWith('mws-restaurant-') &&
-            cacheName != ConfigHelper.CURRENT_CACHE_NAME;
+            cacheName != currentCacheName;
         }).map(function (cacheName) {
           return caches.delete(cacheName);
         })
@@ -53,12 +55,8 @@ self.addEventListener('fetch', function (event) {
   if (event.request.url.indexOf(ConfigHelper.DATABASE_URL) !== -1 && event.request.method == 'GET') {
     event.respondWith(
       // open db
-      idb.open('restaurants', 1, upgradeDb => {
-        var restaurantsDb = upgradeDb.createObjectStore('restaurants', {
-          keyPath: 'id'
-        });
-        restaurantsDb.createIndex('needs-sync', 'needs_sync', {unique: false});
-      }).then(function (db) {
+      IdbHelper.openDatabase().then(function (db) {
+        if (!db) return;
         var tx = db.transaction('restaurants')
         var store = tx.objectStore('restaurants');
         // get all restaurants inside local db
@@ -71,7 +69,7 @@ self.addEventListener('fetch', function (event) {
             var tx = db.transaction('restaurants', 'readwrite')
             var store = tx.objectStore('restaurants');
             // update restaurants
-            var promises = restaurantsOnline.map(function(restaurantOnline){
+            var promises = restaurantsOnline.map(function (restaurantOnline) {
               return store.get(parseInt(restaurantOnline.id)).then(restaurantOffline => {
                 if (restaurantOffline.needs_sync == 0) {
                   store.put(restaurantOnline);
@@ -84,9 +82,9 @@ self.addEventListener('fetch', function (event) {
                 return restaurantOnline;
               });
             })
-            return Promise.all(promises).then(function(results) {
-                return new Response(JSON.stringify(results), { "status": 200, headers: { 'Content-Type': 'application/json' } });
-              })
+            return Promise.all(promises).then(function (results) {
+              return new Response(JSON.stringify(results), { "status": 200, headers: { 'Content-Type': 'application/json' } });
+            })
 
           }).catch(function (error) {
             // fetch offline
@@ -145,10 +143,10 @@ self.addEventListener('fetch', function (event) {
     // prevent two fetches
     return;
   }
-  
+
   // return cached files
   event.respondWith(
-    caches.open(ConfigHelper.CURRENT_CACHE_NAME).then(function (cache) {
+    caches.open(currentCacheName).then(function (cache) {
       return cache.match(event.request).then(function (response) {
         return response || fetch(event.request).then(function (response) {
           cache.put(event.request, response.clone());
@@ -162,7 +160,7 @@ self.addEventListener('fetch', function (event) {
 self.addEventListener('message', function (event) {
   if (event.data.action === 'skipWaiting') {
     self.skipWaiting();
-    console.log('SW skip waiting received')
+    console.log('SW skip waiting')
   }
 });
 
