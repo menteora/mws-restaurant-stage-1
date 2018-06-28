@@ -2,15 +2,13 @@ importScripts('js/idb.js');
 importScripts('js/idbhelper.js');
 importScripts('js/confighelper.js');
 
-currentCacheName = 'mws-restaurant-dynamic-v24';
+currentCacheName = 'mws-restaurant-dynamic-v30';
 
 function syncFavorite() {
   return new Promise(function (resolve, reject) {
     console.log('favorite start sync');
-    idb.open('restaurants').then((db) => {
-      if (!db) return;
-      const tx = db.transaction('restaurants', 'readwrite');
-      const store = tx.objectStore('restaurants');
+    IdbHelper.openDatabase().then((db) => {
+      const store = IdbHelper.openRestaurantsDatabase(db);
       const storeIndex = store.index('needs-sync');
 
       storeIndex.getAll(1).then(function (restaurants) {
@@ -20,8 +18,7 @@ function syncFavorite() {
           }).then(function (response) {
             return response.json();
           }).then(function (data) {
-            const tx = db.transaction('restaurants', 'readwrite');
-            const store = tx.objectStore('restaurants');
+            const store = IdbHelper.openRestaurantsDatabase(db);
             data.needs_sync = 0;
             store.put(data);
             console.log(`favorite end sync restaurant ${restaurant.id}`);
@@ -40,7 +37,6 @@ self.addEventListener('install', event => {
   console.log('SW installing…');
 });
 
-
 self.addEventListener('activate', function (event) {
   event.waitUntil(
     caches.keys().then(function (cacheNames) {
@@ -57,15 +53,14 @@ self.addEventListener('activate', function (event) {
     })
   );
 });
+
 self.addEventListener('fetch', function (event) {
   // check if page is a restaurants data
   if (event.request.url.indexOf(ConfigHelper.DATABASE_URL) !== -1 && event.request.method == 'GET') {
     event.respondWith(
       // open db
       IdbHelper.openDatabase().then(function (db) {
-        if (!db) return;
-        var tx = db.transaction('restaurants')
-        var store = tx.objectStore('restaurants');
+        const store = IdbHelper.openRestaurantsDatabase(db);
         // get all restaurants inside local db
         return store.getAll().then(function (restaurantsOffline) {
           return fetch(event.request).then(function (response) {
@@ -73,8 +68,7 @@ self.addEventListener('fetch', function (event) {
           }).then(function (restaurantsOnline) {
             // fetch online
             console.log("fetch restaurants online");
-            var tx = db.transaction('restaurants', 'readwrite')
-            var store = tx.objectStore('restaurants');
+            const store = IdbHelper.openRestaurantsDatabase(db);
             // update restaurants
             var promises = restaurantsOnline.map(function (restaurantOnline) {
               return store.get(parseInt(restaurantOnline.id)).then(restaurantOffline => {
@@ -109,18 +103,13 @@ self.addEventListener('fetch', function (event) {
     console.log(event.request.url);
     event.respondWith(
       // open db
-      idb.open('restaurants', 1, upgradeDb => {
-        upgradeDb.createObjectStore('restaurants', {
-          keyPath: 'id'
-        });
-      }).then(function (db) {
+      IdbHelper.openDatabase().then(function (db) {
         // get all restaurants inside local db
         return fetch(event.request).then(function (response) {
           return response.json();
         }).then(function (restaurantOnline) {
           // fetch online
-          var tx = db.transaction('restaurants', 'readwrite')
-          var store = tx.objectStore('restaurants');
+          const store = IdbHelper.openRestaurantsDatabase(db);
           store.put(restaurantOnline);
           return new Response(JSON.stringify(restaurantOnline), { "status": 200, headers: { 'Content-Type': 'application/json' } });
         }).catch(function (error) {
@@ -130,9 +119,7 @@ self.addEventListener('fetch', function (event) {
           const isFavorite = currentUrl.searchParams.get('is_favorite');
           //const mainPathUrl = currentUrl.pathname.split('/')[1];
           const restaurantsId = currentUrl.pathname.split('/')[2];
-
-          var tx = db.transaction('restaurants', 'readwrite')
-          var store = tx.objectStore('restaurants');
+          const store = IdbHelper.openRestaurantsDatabase(db);
 
           return store.get(parseInt(restaurantsId)).then((restaurantOffline) => {
             restaurantOffline.needs_sync = 1;

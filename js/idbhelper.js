@@ -15,14 +15,10 @@ class IdbHelper {
     });
   }
 
-  static openRestaurantsDatabase() {
-    return IdbHelper.openDatabase().then(db => {
-      if (!db) return;
-      var tx = db.transaction('restaurants')
-      return tx.objectStore('restaurants');
-    }).catch(function (error) {
-      console.log(`openRestaurantsDatabase error: ${error}`)
-    });
+  static openRestaurantsDatabase(db) {
+    if (!db) return;
+    var tx = db.transaction('restaurants', 'readwrite');
+    return tx.objectStore('restaurants');
   }
 
 }
