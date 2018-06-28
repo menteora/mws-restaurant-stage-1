@@ -16,43 +16,45 @@ class AppHelper {
   * @param {string} filename - Name of file to change
   * @param {string} string - Suffix to append
   */
- static setSuffixToFileAndWebpExtension(filename, string) {
-  return (string) ? filename + string + '.webp' : filename + '.webp';
-}
+  static setSuffixToFileAndWebpExtension(filename, string) {
+    return (string) ? filename + string + '.webp' : filename + '.webp';
+  }
 
   /**
   * @description Service worker init and workflow
   */
   static startServiceWorker() {
-    if ('serviceWorker' in navigator) {
+    if (!navigator.serviceWorker) return;
+
       navigator.serviceWorker.register('/sw.js').then((reg) => {
         if (!navigator.serviceWorker.controller) {
           return;
         }
         if (reg.waiting) {
-          console.log('SW waiting')
+          console.log('SW waiting');
           AppHelper.skipWaiting(reg.waiting);
           return;
         }
         if (reg.installing) {
-          console.log('SW installing')
+          console.log('SW installing');
           AppHelper.trackInstalling(reg.installing);
           return;
         }
         reg.addEventListener('updatefound', () => {
-          console.log('SW update found')
+          console.log('SW update found');
           AppHelper.trackInstalling(reg.installing);
         });
+      }).catch((error) => {
+        console.error(error);
       });
 
       let refreshing;
-      navigator.serviceWorker.addEventListener('controllerchange', function () {
-        console.log('SW controllerchange')
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        console.log('SW controllerchange');
         if (refreshing) return;
         window.location.reload();
         refreshing = true;
       });
-    }
   }
 
   /**

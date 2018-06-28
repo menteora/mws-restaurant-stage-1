@@ -2,7 +2,7 @@ importScripts('js/idb.js');
 importScripts('js/idbhelper.js');
 importScripts('js/confighelper.js');
 
-currentCacheName = 'mws-restaurant-dynamic-v88';
+currentCacheName = 'mws-restaurant-dynamic-v24';
 
 function syncFavorite() {
   return new Promise(function (resolve, reject) {
@@ -36,6 +36,11 @@ function syncFavorite() {
   });
 }
 
+self.addEventListener('install', event => {
+  console.log('SW installing…');
+});
+
+
 self.addEventListener('activate', function (event) {
   event.waitUntil(
     caches.keys().then(function (cacheNames) {
@@ -47,6 +52,8 @@ self.addEventListener('activate', function (event) {
           return caches.delete(cacheName);
         })
       );
+    }).then(() => {
+      console.log('SW activate');
     })
   );
 });
