@@ -149,7 +149,8 @@ createReviewHTML = (review) => {
   li.appendChild(name);
 
   const date = document.createElement('p');
-  date.innerHTML = review.date;
+  var createdAt = new Date(review.createdAt);
+  date.innerHTML = createdAt.toDateString();
   // Add attribute for css
   date.setAttribute("class", "review-date");
   li.appendChild(date);

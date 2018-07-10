@@ -8,7 +8,7 @@ class DBHelper {
    */
   static fetchRestaurants(callback) {
 
-    fetch(ConfigHelper.DATABASE_URL).then(res => {
+    fetch(ConfigHelper.RESTAURANTS_URL).then(res => {
       return res.json();
     })
       .then(restaurants => {
@@ -20,22 +20,37 @@ class DBHelper {
   }
 
   /**
-   * Fetch a restaurant by its ID.
+   * Fetch a restaurant and reviews by its ID.
    */
   static fetchRestaurantById(id, callback) {
-    // fetch all restaurants with proper error handling.
-    DBHelper.fetchRestaurants((error, restaurants) => {
-      if (error) {
-        callback(error, null);
-      } else {
-        const restaurant = restaurants.find(r => r.id == id);
-        if (restaurant) { // Got the restaurant
-          callback(null, restaurant);
-        } else { // Restaurant does not exist in the database
-          callback('Restaurant does not exist', null);
+    DBHelper.fetchReviewsByRestaurantId(id).then((reviews) => {
+      // fetch all restaurants with proper error handling.
+      DBHelper.fetchRestaurants((error, restaurants) => {
+        if (error) {
+          callback(error, null);
+        } else {
+          const restaurant = restaurants.find(r => r.id == id);
+          if (restaurant) { // Got the restaurant
+            restaurant.reviews = reviews;
+            callback(null, restaurant);
+          } else { // Restaurant does not exist in the database
+            callback('Restaurant does not exist', null);
+          }
         }
-      }
+      });
     });
+  }
+
+  /**
+   * Fetch all reviews by restaurant id
+   * @param {string} id - Id of the restaurant
+   */
+  static fetchReviewsByRestaurantId(id) {
+    return fetch(`${ConfigHelper.REVIEWS_URL}/?restaurant_id=${id}`).then((response) => {
+      return response.json();
+    }).then((data) => {
+      return data;
+    })
   }
 
   /**
@@ -45,7 +60,7 @@ class DBHelper {
    */
   static toggleStar(id, starred) {
     //const favorite = (starred == "true");
-    return fetch(`${ConfigHelper.DATABASE_URL}/${id}/?is_favorite=${!JSON.parse(starred)}`, {
+    return fetch(`${ConfigHelper.RESTAURANTS_URL}/${id}/?is_favorite=${!JSON.parse(starred)}`, {
       method: "PUT"
     }).then((response) => {
       return response.json();

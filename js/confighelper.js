@@ -4,10 +4,17 @@
 class ConfigHelper {
 
   /**
-   * Database URL API.
+   * Database URL API for Restaurants.
    */
-  static get DATABASE_URL() {
+  static get RESTAURANTS_URL() {
     return `http://localhost:1337/restaurants`;
+  }
+
+  /**
+   * Database URL API for Reviews.
+   */
+  static get REVIEWS_URL() {
+    return `http://localhost:1337/reviews`;
   }
 
   /**

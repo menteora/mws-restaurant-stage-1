@@ -2,7 +2,7 @@ importScripts('js/idb.js');
 importScripts('js/idbhelper.js');
 importScripts('js/confighelper.js');
 
-currentCacheName = 'mws-restaurant-dynamic-v30';
+currentCacheName = 'mws-restaurant-dynamic-v34';
 
 function syncFavorite() {
   return new Promise(function (resolve, reject) {
@@ -13,7 +13,7 @@ function syncFavorite() {
 
       storeIndex.getAll(1).then(function (restaurants) {
         restaurants.forEach(function (restaurant) {
-          fetch(`${ConfigHelper.DATABASE_URL}/${restaurant.id}/?is_favorite=${restaurant.is_favorite}`, {
+          fetch(`${ConfigHelper.RESTAURANTS_URL}/${restaurant.id}/?is_favorite=${restaurant.is_favorite}`, {
             method: "PUT"
           }).then(function (response) {
             return response.json();
@@ -56,7 +56,7 @@ self.addEventListener('activate', function (event) {
 
 self.addEventListener('fetch', function (event) {
   // check if page is a restaurants data
-  if (event.request.url.indexOf(ConfigHelper.DATABASE_URL) !== -1 && event.request.method == 'GET') {
+  if (event.request.url.indexOf(ConfigHelper.RESTAURANTS_URL) !== -1 && event.request.method == 'GET') {
     event.respondWith(
       // open db
       IdbHelper.openDatabase().then(function (db) {
@@ -98,8 +98,8 @@ self.addEventListener('fetch', function (event) {
     // prevent two fetchesself
     return;
   }
-  // check if page is a faselfvorite data
-  if (event.request.url.indexOf(ConfigHelper.DATABASE_URL) !== -1 && event.request.url.indexOf(ConfigHelper.FAVORITE_INTERCEPT_PUT_URL) !== -1 && event.request.method == 'PUT') {
+  // check if page is a favorite data
+  if (event.request.url.indexOf(ConfigHelper.RESTAURANTS_URL) !== -1 && event.request.url.indexOf(ConfigHelper.FAVORITE_INTERCEPT_PUT_URL) !== -1 && event.request.method == 'PUT') {
     console.log(event.request.url);
     event.respondWith(
       // open db
