@@ -5,8 +5,11 @@
 ## Project Overview: Stage 3
 
 The main goal of this project is decoupling web application from service worker and offline capabilities.
+- **Web Application** is standard web application, think to be always online
+- **Service worker** save data and assets for offline usage and redirects web application fetches online or offline depending on network
+- **Background Sync** syncronize offline saved data when application turn online
 
-![Fully decoupled offline pwa application](docs/Online fully decoupled PWA application.png?raw=true "Online fully decoupled PWA application")
+![Fully decoupled offline pwa application](docs/Online%20fully%20decoupled%20PWA%20application.png)
 
 ## Project Overview: Stage 1
 
