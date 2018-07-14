@@ -237,12 +237,12 @@ header {
   max-width: 100%;
   font-weight: bold;
 }
-#restaurant-container, #reviews-container {
+#restaurant-container, #reviews-container, #review-container-form {
   border-bottom: 1px solid #d9d9d9;
   border-top: 1px solid #fff;
   padding: 1.5em;
 }
-#reviews-container h2 {
+#reviews-container h2, #review-container-form h2 {
   color: #8A4700;
   font-size: 24pt;
   font-weight: 300;
@@ -259,11 +259,11 @@ header {
   font-weight: bold;
   text-align: right;
 }
-#reviews-list {
+#reviews-list, #review-form {
   margin: 0;
   padding: 0;
 }
-#reviews-list li {
+#reviews-list li, #review-form li {
   background-color: #fff;
   border: 2px solid #f3f3f3;
   display: block;
@@ -273,7 +273,7 @@ header {
   padding: 1.5em;
   position: relative;
 }
-#reviews-list li p {
+#reviews-list li p, #review-form li p {
   margin: 0 0 10px;
 }
 #restaurant-hours td {

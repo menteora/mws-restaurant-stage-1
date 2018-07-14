@@ -9,29 +9,52 @@ document.addEventListener('DOMContentLoaded', (event) => {
     if (error) { // Got an error!
       console.error(error);
     } else {
-      fillBreadcrumb();      
+      fillBreadcrumb();
       const picture = document.getElementById('staticmap-picture');
-  
+
       // Use different maps image from 0 to 400px
       const source = document.createElement('source');
       source.media = '(max-width: 550px)';
       source.srcset = 'https://maps.googleapis.com/maps/api/staticmap?center=40.722216,-73.987501&scale=1&zoom=12&size=550x350&key=AIzaSyBjEzrQVpR768JpvHrJKaHZtd2e_yBD0QM'
-                      + `&markers=size:mid%7Ccolor:red%7C${self.restaurant.latlng.lat},${self.restaurant.latlng.lng}`;
-    
+        + `&markers=size:mid%7Ccolor:red%7C${self.restaurant.latlng.lat},${self.restaurant.latlng.lng}`;
+
       // Standard image is resized to maximum 600px
       const image = document.getElementById('staticmap');
       image.alt = `${restaurant.name} map`;
       image.src = 'https://maps.googleapis.com/maps/api/staticmap?center=40.722216,-73.987501&scale=2&zoom=11&size=512x200&key=AIzaSyBjEzrQVpR768JpvHrJKaHZtd2e_yBD0QM'
-      + `&markers=size:small%7Ccolor:red%7C${self.restaurant.latlng.lat},${self.restaurant.latlng.lng}`;
-    
+        + `&markers=size:small%7Ccolor:red%7C${self.restaurant.latlng.lat},${self.restaurant.latlng.lng}`;
+
       // Insert source before image
       picture.insertBefore(source, image);
-      
+
+      // Add submit event listener for restaurant review 
+      const form = document.getElementById('review-form');
+      form.addEventListener('submit', function () {
+        addReview(restaurant.id);
+      });
+
       // Init service worker
       AppHelper.startServiceWorker();
     }
   });
 });
+
+/**
+ * Add new review.
+ */
+addReview = (id) => {
+  console.log('Restaurant ID: ' + id);
+  form = document.getElementById('review-form');
+
+  DBHelper.addRestaurantReview(id, form)
+  .then((review) => {
+    const ul = document.getElementById('reviews-list');
+    ul.appendChild(createReviewHTML(review));
+  })
+  .catch((error) => {
+    alert(error);
+  });
+}
 
 /**
  * Get current restaurant from page URL.
@@ -69,11 +92,11 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   address.innerHTML = restaurant.address;
 
   const picture = document.getElementById('restaurant-picture');
-  
+
   // Use small image from 0 to 400px
   const source = document.createElement('source');
   source.media = '(max-width: 400px)';
-  source.srcset = AppHelper.setSuffixToFileAndWebpExtension(DBHelper.imageUrlForRestaurant(restaurant),'-300');
+  source.srcset = AppHelper.setSuffixToFileAndWebpExtension(DBHelper.imageUrlForRestaurant(restaurant), '-300');
 
   // Standard image is resized to maximum 600px
   const image = document.getElementById('restaurant-img');
@@ -120,9 +143,6 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
  */
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
-  const title = document.createElement('h2');
-  title.innerHTML = 'Reviews';
-  container.appendChild(title);
 
   if (!reviews) {
     const noReviews = document.createElement('p');
@@ -131,10 +151,11 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
     return;
   }
   const ul = document.getElementById('reviews-list');
+  // set empty reviews
+  ul.innerHTML = '';
   reviews.forEach(review => {
     ul.appendChild(createReviewHTML(review));
   });
-  container.appendChild(ul);
 }
 
 /**
@@ -171,7 +192,7 @@ createReviewHTML = (review) => {
 /**
  * Add restaurant name to the breadcrumb navigation menu
  */
-fillBreadcrumb = (restaurant=self.restaurant) => {
+fillBreadcrumb = (restaurant = self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
   const li = document.createElement('li');
   li.innerHTML = restaurant.name;

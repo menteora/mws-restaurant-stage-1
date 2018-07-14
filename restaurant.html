@@ -7,7 +7,7 @@
   <!-- Main CSS file -->
   <link rel="stylesheet" href="css/styles.css" type="text/css">
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#3397DB"/>
+  <meta name="theme-color" content="#3397DB" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Restaurant Info</title>
 </head>
@@ -39,7 +39,7 @@
     <!-- Beginning map -->
     <section id="map-container">
       <picture id="staticmap-picture">
-          <img id="staticmap" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+        <img id="staticmap" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
       </picture>
     </section>
     <!-- End map -->
@@ -59,9 +59,54 @@
       </div>
       <!-- End create two container for flex view 50% on bigger viewport -->
     </section>
-    <!-- end restaurant -->
+    <!-- End restaurant -->
+    <!-- Beginning review form -->
+    <section id="review-container-form">
+      <h2>Add review</h2>
+      <form id="review-form" action="javascript:void(0)">
+        <li>
+          <td>
+            <label for='name'>Name</label>
+            <input type="text" id="name">
+            <br>
+          </td>
+          <td>
+            <label>Rating: </label>
+          </td>
+          <td>
+            <label>
+              <input type="radio" name="rating" value="1" />
+              <span>1</span>
+            </label>
+            <label>
+              <input type="radio" name="rating" value="2" />
+              <span>2</span>
+            </label>
+            <label>
+              <input type="radio" name="rating" value="3" />
+              <span>3</span>
+            </label>
+            <label>
+              <input type="radio" name="rating" value="4" />
+              <span>4</span>
+            </label>
+            <input type="radio" name="rating" value="5" />
+            <label for="5">5</label>
+          </td>
+          <td>
+            <br>
+            <label for="comment">Comment:</label>
+            <br>
+          </td>
+          <textarea rows="4" cols="50" id="comment"></textarea>
+          <input id="review-submit" type="submit">
+        </li>
+      </form>
+    </section>
+    <!-- End for reviews -->
     <!-- Beginning reviews -->
     <section id="reviews-container">
+      <h2>Reviews</h2>
       <ul id="reviews-list"></ul>
     </section>
     <!-- End reviews -->
@@ -86,10 +131,10 @@
   <script type="application/javascript" charset="utf-8" src="js/restaurant_info.js"></script>
   <!-- End scripts -->
   <noscript id="deferred-styles">
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700"/>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" />
   </noscript>
   <script>
-    var loadDeferredStyles = function() {
+    var loadDeferredStyles = function () {
       var addStylesNode = document.getElementById("deferred-styles");
       var replacement = document.createElement("div");
       replacement.innerHTML = addStylesNode.textContent;
@@ -97,8 +142,8 @@
       addStylesNode.parentElement.removeChild(addStylesNode);
     };
     var raf = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
-        window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-    if (raf) raf(function() { window.setTimeout(loadDeferredStyles, 0); });
+      window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+    if (raf) raf(function () { window.setTimeout(loadDeferredStyles, 0); });
     else window.addEventListener('load', loadDeferredStyles);
   </script>
 </body>

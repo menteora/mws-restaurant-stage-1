@@ -30,4 +30,12 @@ class ConfigHelper {
   static get CURRENT_CACHE_NAME() {
     return `mws-restaurant-dynamic-v82`;
   }
+
+  /**
+   * Get url for review.
+   */
+  static get REVIEW_INTERCEPT_GET_URL() {
+    return `/?restaurant_id=`;
+  }
+
 }

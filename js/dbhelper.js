@@ -171,4 +171,32 @@ class DBHelper {
   static imageUrlForRestaurant(restaurant) {
     return (`/img/${restaurant.photograph}`);
   }
+
+  /**
+   * Restaurant add review.
+   * @param {string} id - Id of the restaurant
+   * @param {object} form - Current representation of submitted form
+   */
+  static addRestaurantReview(id, form) {
+
+    const review = {
+      'id': '',
+      'restaurant_id': id,
+      'comments': form.comment.value,
+      'createdAt': Date.now(),
+      'updatedAt': Date.now(),
+      'name': form.name.value,
+      'rating': form.rating.value
+    };
+
+    console.log('Form Data: ' + JSON.stringify(review));
+    return fetch(`${ConfigHelper.REVIEWS_URL}/`, {
+      method: "POST",
+      body: JSON.stringify(review)
+    }).then((response) => {
+      return response.json();
+    }).then((data) => {
+      return data;
+    });
+  }
 }
