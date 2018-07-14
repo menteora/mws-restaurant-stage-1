@@ -43,7 +43,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
  * Add new review.
  */
 addReview = (id) => {
-  console.log('Restaurant ID: ' + id);
   form = document.getElementById('review-form');
 
   DBHelper.addRestaurantReview(id, form)

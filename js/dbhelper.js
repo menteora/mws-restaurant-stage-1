@@ -189,7 +189,6 @@ class DBHelper {
       'rating': form.rating.value
     };
 
-    console.log('Form Data: ' + JSON.stringify(review));
     return fetch(`${ConfigHelper.REVIEWS_URL}/`, {
       method: "POST",
       body: JSON.stringify(review)

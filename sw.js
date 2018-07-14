@@ -2,7 +2,7 @@ importScripts('js/idb.js');
 importScripts('js/idbhelper.js');
 importScripts('js/confighelper.js');
 
-currentCacheName = 'mws-restaurant-dynamic-v123';
+currentCacheName = 'mws-restaurant-dynamic-v2';
 
 function syncFavorite() {
   return new Promise(function (resolve, reject) {
@@ -42,6 +42,9 @@ function syncReviews() {
 
       storeIndex.getAll("").then(function (reviews) {
         reviews.forEach(function (review) {
+          // remove local_id from POST
+          const localId = review.local_id;
+          delete review.local_id;
           fetch(`${ConfigHelper.REVIEWS_URL}/`, {
             method: "POST",
             body: JSON.stringify(review)
@@ -49,7 +52,8 @@ function syncReviews() {
             return response.json();
           }).then(function (data) {
             const store = IdbHelper.openReviewsTable(db);
-            data.needs_sync = 0;
+            // re-add local_id for local update
+            data.local_id = localId;
             store.put(data);
             console.log(`review end sync review ${data.id}`);
             resolve('synced');
@@ -85,7 +89,7 @@ self.addEventListener('activate', function (event) {
 });
 
 self.addEventListener('fetch', function (event) {
-  console.log(event.request.url);
+  //console.log(event.request.url);
   // check if page is a restaurants data
   if (event.request.url.indexOf(ConfigHelper.RESTAURANTS_URL) !== -1 && event.request.method == 'GET') {
     event.respondWith(
@@ -221,7 +225,6 @@ self.addEventListener('fetch', function (event) {
   }
   // check if page is a reviews post data
   if (event.request.url.indexOf(ConfigHelper.REVIEWS_URL) !== -1 && event.request.method == 'POST') {
-    console.log(event.request);
     event.respondWith(
       // open db
       IdbHelper.openDatabase().then(function (db) {
