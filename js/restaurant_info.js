@@ -46,13 +46,18 @@ addReview = (id) => {
   form = document.getElementById('review-form');
 
   DBHelper.addRestaurantReview(id, form)
-  .then((review) => {
-    const ul = document.getElementById('reviews-list');
-    ul.appendChild(createReviewHTML(review));
-  })
-  .catch((error) => {
-    alert(error);
-  });
+    .then((review) => {
+      const ul = document.getElementById('reviews-list');
+      ul.appendChild(createReviewHTML(review));
+      document.getElementById('name').value = '';
+      var radio = document.getElementsByName("rating");
+      for (var i = 0; i < radio.length; i++)
+        radio[i].checked = false;
+      document.getElementById('comment').value = '';
+    })
+    .catch((error) => {
+      alert(error);
+    });
 }
 
 /**
