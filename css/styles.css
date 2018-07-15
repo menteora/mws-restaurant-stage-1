@@ -242,12 +242,24 @@ header {
   border-top: 1px solid #fff;
   padding: 1.5em;
 }
+
 #reviews-container h2, #review-container-form h2 {
   color: #8A4700;
   font-size: 24pt;
   font-weight: 300;
   letter-spacing: -1px;
   padding-bottom: 1pt;
+}
+#review-form {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #fff;
+  border: 2px solid #f3f3f3;
+  list-style-type: none;
+  margin: 0 0 30px;
+  overflow: hidden;
+  padding: 1.5em;
+  position: relative;
 }
 .review-name {
   font-weight: bold;
@@ -259,11 +271,11 @@ header {
   font-weight: bold;
   text-align: right;
 }
-#reviews-list, #review-form {
+#reviews-list {
   margin: 0;
   padding: 0;
 }
-#reviews-list li, #review-form li {
+#reviews-list li {
   background-color: #fff;
   border: 2px solid #f3f3f3;
   display: block;
@@ -272,6 +284,20 @@ header {
   overflow: hidden;
   padding: 1.5em;
   position: relative;
+}
+#form-name {
+  width: 100%;
+}
+#form-name #name, #form-rating, #comment{
+  margin-bottom: 1.5em;
+  width: 100%;
+}
+#comment {
+  width: 100%;
+  font-family: 'Roboto', sans-serif;
+}
+#review-submit {
+  float: right;
 }
 #reviews-list li p, #review-form li p {
   margin: 0 0 10px;
@@ -298,6 +324,16 @@ header {
   }
   #restaurant-hours {
     width: 100%;
+  }
+  #form-name, #form-rating {
+    width: calc(50% - 15px);
+  }
+  #form-name {
+    margin-right: 30px;
+  }
+  #label-rating:after { 
+    content:"\a";
+    white-space: pre;
   }
 }
 @media screen and (min-width: 1024px) {

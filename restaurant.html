@@ -62,45 +62,36 @@
     <!-- End restaurant -->
     <!-- Beginning review form -->
     <section id="review-container-form">
-      <h2>Add review</h2>
+      <h2 id="review-title">Add review</h2>
       <form id="review-form" action="javascript:void(0)">
-        <li>
-          <td>
-            <label for='name'>Name</label>
-            <input type="text" id="name">
-            <br>
-          </td>
-          <td>
-            <label>Rating: </label>
-          </td>
-          <td>
-            <label>
-              <input type="radio" name="rating" value="1" />
-              <span>1</span>
-            </label>
-            <label>
-              <input type="radio" name="rating" value="2" />
-              <span>2</span>
-            </label>
-            <label>
-              <input type="radio" name="rating" value="3" />
-              <span>3</span>
-            </label>
-            <label>
-              <input type="radio" name="rating" value="4" />
-              <span>4</span>
-            </label>
-            <input type="radio" name="rating" value="5" />
-            <label for="5">5</label>
-          </td>
-          <td>
-            <br>
-            <label for="comment">Comment:</label>
-            <br>
-          </td>
-          <textarea rows="4" cols="50" id="comment"></textarea>
+        <div id="form-name">
+          <label for='name'><b>Name:</b></label>
+          <input type="text" id="name" required>
+        </div>
+        <div id="form-rating">
+          <label id="label-rating"><b>Rating: </b></label>
+          <label>
+            <input type="radio" name="rating" value="1" required/>
+            <span>1</span>
+          </label>
+          <label>
+            <input type="radio" name="rating" value="2" />
+            <span>2</span>
+          </label>
+          <label>
+            <input type="radio" name="rating" value="3" />
+            <span>3</span>
+          </label>
+          <label>
+            <input type="radio" name="rating" value="4" />
+            <span>4</span>
+          </label>
+          <input type="radio" name="rating" value="5" />
+          <label for="5">5</label>
+        </div>
+          <label for="comment"><b>Comment:</b></label>
+          <textarea rows="4" cols="50" id="comment" required></textarea>
           <input id="review-submit" type="submit">
-        </li>
       </form>
     </section>
     <!-- End for reviews -->
