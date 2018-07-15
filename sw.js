@@ -2,7 +2,7 @@ importScripts('js/idb.js');
 importScripts('js/idbhelper.js');
 importScripts('js/confighelper.js');
 
-currentCacheName = 'mws-restaurant-dynamic-v01';
+currentCacheName = 'mws-restaurant-dynamic-v1';
 
 function syncFavorite() {
   return new Promise(function (resolve, reject) {

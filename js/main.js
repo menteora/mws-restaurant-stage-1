@@ -160,7 +160,7 @@ createRestaurantHTML = (restaurant) => {
 
 
   const buttonContainer = document.createElement('div');
-  buttonContainer.id = "button-container";
+  buttonContainer.className = "button-container";
 
   const more = document.createElement('a');
   more.className = "details"
