@@ -171,12 +171,14 @@ createRestaurantHTML = (restaurant) => {
   const star = document.createElement('a');
   star.className = "star";
   star.innerHTML = (JSON.parse(restaurant.is_favorite)) ? "✭" : "✩";
+  star.setAttribute("aria-label", (JSON.parse(restaurant.is_favorite)) ? "remove as favorite" : "add as favorite");
   star.href = 'javascript:void(0)';
   star.addEventListener('click', function () {
 
     DBHelper.toggleStar(restaurant.id, restaurant.is_favorite)
       .then((data) => {
         this.innerHTML = (JSON.parse(data)) ? "✭" : "✩";
+        this.setAttribute("aria-label", (JSON.parse(data)) ? "remove as favorite" : "add as favorite");
         restaurant.is_favorite = (JSON.parse(data)) ? 'true' : 'false';
       })
       .catch((error) => {
